@@ -1,6 +1,7 @@
 package muralis.desafio.Enderecos.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -25,12 +26,14 @@ public class Cliente {
 	
 	public Cliente(String nome) {
 		setNome(nome);
-		setDataCadastro(LocalDate.now().toString());
+		DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		LocalDate agora = LocalDate.now();
+		setDataCadastro(agora.format(pattern));
 	}
 	
 	public Cliente(String nome, String data) {
 		setNome(nome);
-		LocalDate momento = LocalDate.parse(data);
+		//LocalDate momento = LocalDate.parse(data);
 		setDataCadastro(data);
 	}
 	
@@ -46,12 +49,12 @@ public class Cliente {
 	}
 
 	public String getNome() {
-		return nome;
+		return this.nome;
 	}
 
 	
 	public String getDataCadastro() {
-		return dataCadastro;
+		return this.dataCadastro;
 	}
 
 	public void setId(long id) {

@@ -19,11 +19,11 @@ public class JdbcClienteRepository implements ClienteRepository {
 
 	  @Override
 	  public int salvar(Cliente cliente ) {
-		  DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		  //DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 	    return jdbcTemplate.update("INSERT INTO clientes (nome, data_cadastro) VALUES(?,?)",
 	        new Object[] { 	cliente.getNome(), 
-	        				//cliente.getDataCadastro()
-	        				LocalDate.now().toString().replace('-', '/')
+	        				cliente.getDataCadastro()
+	        				//LocalDate.now().toString().replace('-', '/')
 	        			 });
 	  }
 

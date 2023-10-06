@@ -62,9 +62,10 @@ public class ClienteController {
 
   @PostMapping("/clientes")
   public ResponseEntity<String> createCliente(@RequestBody Cliente cliente) {
-    try {
-      repositorioDeCliente.salvar(new Cliente(cliente.getNome(), cliente.getDataCadastro()));
-      return new ResponseEntity<>("Cliente cadastrado com sucesso.", HttpStatus.CREATED);
+	 try {
+    	
+    	repositorioDeCliente.salvar(new Cliente(cliente.getNome(), cliente.getDataCadastro()));
+    	return new ResponseEntity<>("Cliente cadastrado com sucesso.", HttpStatus.CREATED);
     } 
     catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
