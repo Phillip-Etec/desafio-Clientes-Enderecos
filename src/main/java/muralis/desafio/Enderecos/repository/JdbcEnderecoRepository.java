@@ -18,7 +18,7 @@ public class JdbcEnderecoRepository implements EnderecoRepository {
 	
 	@Override
 	public int salvar(Endereco endereco) {
-		return jdbcTemplate.update("INSERT INTO enderecos (cep, logradouro, cidade, numero, complemento, cliente_id) VALUES(?, ?, ?, ?, ?, ?)",
+		return jdbcTemplate.update("INSERT INTO enderecos (cep, logradouro, cidade, numero, complemento, idcliente) VALUES(?, ?, ?, ?, ?, ?)",
 				new Object[] { endereco.getCep(),
 						endereco.getLogradouro(),
 						endereco.getCidade(),
@@ -31,7 +31,7 @@ public class JdbcEnderecoRepository implements EnderecoRepository {
 	
 	@Override
 	public int atualizar(Endereco endereco) {
-		return jdbcTemplate.update("UPDATE enderecos SET cep = ?, logradouro = ? , cidade = ?, numero = ?, complemento = ? WHERE cliente_id=?",
+		return jdbcTemplate.update("UPDATE enderecos SET cep = ?, logradouro = ? , cidade = ?, numero = ?, complemento = ? WHERE id=?",
 				new Object[] { endereco.getCep(),
 								endereco.getLogradouro(),
 								endereco.getCidade(),
@@ -45,7 +45,7 @@ public class JdbcEnderecoRepository implements EnderecoRepository {
 	@Override
 	public Endereco encontrarPorId(Long id) {
 		try {
-			Endereco endereco = jdbcTemplate.queryForObject("SELECT id, cep, logradouro, cidade, numero, complemento, cliente_id FROM enderecos WHERE id=?",
+			Endereco endereco = jdbcTemplate.queryForObject("SELECT id, cep, logradouro, cidade, numero, complemento, idcliente FROM enderecos WHERE id=?",
 	        BeanPropertyRowMapper.newInstance(Endereco.class), id);
 			return endereco;
 		} 
@@ -73,7 +73,7 @@ public class JdbcEnderecoRepository implements EnderecoRepository {
 	
 	@Override
 	public List<Endereco> encontrarPorCliente(long idCliente) {
-		String SqlQuery = "SELECT id, cep, logradouro, numero, complemento, cliente_id FROM enderecos JOIN clientes ON cliente_id = clientes(id) WHERE cliente_id="+idCliente+";";
+		String SqlQuery = "SELECT id, cep, logradouro, numero, complemento, cliente_id FROM enderecos JOIN clientes ON idcliente = clientes(id) WHERE cliente_id="+idCliente+";";
 		
 		List<Endereco> enderecos = jdbcTemplate.query(SqlQuery, BeanPropertyRowMapper.newInstance(Endereco.class));
 

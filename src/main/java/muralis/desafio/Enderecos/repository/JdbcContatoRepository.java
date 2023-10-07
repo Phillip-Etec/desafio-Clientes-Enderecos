@@ -22,7 +22,7 @@ public class JdbcContatoRepository implements ContatoRepository {
 
 	@Override
 	public int salvar(Contato contato ) {
-		return jdbcTemplate.update("INSERT INTO contatos (tipo, texto, cliente_id) VALUES(?, ?, ?)",
+		return jdbcTemplate.update("INSERT INTO contatos (tipo, texto, idcliente) VALUES(?, ?, ?)",
 				new Object[] { contato.getTipo(), contato.getTexto(), contato.getIdCliente()  });
 	}
 
@@ -37,7 +37,7 @@ public class JdbcContatoRepository implements ContatoRepository {
 	@Override
 	public Contato encontrarPorId(Long id) {
 		try {
-			Contato contato = jdbcTemplate.queryForObject("SELECT id, tipo, texto, cliente_id FROM contatos WHERE id=?",
+			Contato contato = jdbcTemplate.queryForObject("SELECT id, tipo, texto, idcliente FROM contatos WHERE id=?",
 	        BeanPropertyRowMapper.newInstance(Contato.class), id);
 			return contato;
 		} 

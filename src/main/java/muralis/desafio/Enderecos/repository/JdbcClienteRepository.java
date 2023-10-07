@@ -60,7 +60,12 @@ public class JdbcClienteRepository implements ClienteRepository {
 
 	@Override
 	public int deletarPorId(Long id) {
-		return jdbcTemplate.update("DELETE FROM clientes WHERE id=?", id);
+		int codigo = jdbcTemplate.update("DELETE FROM contatos WHERE idcliente = ?", id);
+		codigo = jdbcTemplate.update("DELETE FROM enderecos WHERE idcliente = ?", id); 
+		
+		codigo = jdbcTemplate.update("DELETE FROM clientes WHERE id=?", id);
+		
+		return codigo;
 	}
 
 	@Override
@@ -82,7 +87,10 @@ public class JdbcClienteRepository implements ClienteRepository {
 
 	@Override
 	public int deletarTodos() {
-		return jdbcTemplate.update("DELETE FROM clientes");
+		int codigo = jdbcTemplate.update("DELETE FROM contatos");
+		codigo = jdbcTemplate.update("DELETE FROM enderecos");
+		codigo = jdbcTemplate.update("DELETE FROM clientes");
+		return 	codigo;
 	}
   
 	private String tratarData(LocalDateTime dataCliente) {
