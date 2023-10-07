@@ -1,13 +1,14 @@
 # Desafio Backend Muralis Java
-##### Esse repositório contém a solução para o desafio back-end da Muralis de Java Spring Boot.
-##### O software é uma API restful, que recebe requests HTTP e atualiza um banco de dados PostgresSQL.
+Esse repositório contém a solução para o desafio back-end da Muralis de Java Spring Boot.
+O projeto é uma API restful, que recebe requests HTTP e atualiza um banco de dados PostgresSQL.
 ___
 ## Iniciando
-###### Dependências:
+Dependências:
 * git
 * JDK versão 20 ou mais atual
 * Maven versão 3.8.7
-###### Para iniciar o projeto, basta clonar esse repositório e rodá-lo com o maven:
+
+Para iniciar o projeto, basta clonar esse repositório e rodá-lo com o maven:
 ```
 git clone https://github.com/Phillip-Etec/desafio-Clientes-Enderecos --depth 1
 cd desafio-Clientes-Enderecos
@@ -47,13 +48,13 @@ ___
 ### APIs
 A seguir estão as tabelas das APIs fornecidas:
 
-#### Clientes:
-|  Método  | Url |  Ação  | Exemplo Corpo JSON |
-| :------: | :-- | :----- | :--------: |
-| POST | /api/clientes | Cria um novo cliente | `{"nome":"nome", "dataCadastro":"2023-07-04 00:00:00"}` |
-| GET | /api/clientes | Retorna todos os clientes | ` ` |
-| GET | /api/clientes/{id} | Retorna um cliente pelo id | ` ` |
-| GET | /api/clientes?nome={nome} | Retorna todos os clientes com esse {nome} | ` ` |
-| PUT | /api/clientes/{id} | Atualiza um cliente pelo | `{"nome":"novo nome", "dataCadastro":"2023-02-15 00:00:00"}` |
-| DELETE | /api/clientes/{id} | Delete um cliente pelo id | ` ` |
-| DELETE | /api/clientes/ | Deleta todos os clientes | ` ` |
+#### API de Clientes:
+|  Método  | Url |  Ação  | Exemplo Corpo JSON | Retorno |
+| :------: | :-- | :----- | :--------          | :------ |
+| POST | /api/clientes | Criar um novo cliente | `{"nome":"nome", "dataCadastro":"2023-07-04 00:00:00"}` | Mensagem de sucesso ou erro |
+| GET | /api/clientes | Retornar todos os clientes | ` ` | Array de Objetos Cliente |
+| GET | /api/clientes/{id} | Retornar um cliente pelo id | ` ` | Objeto Cliente |
+| GET | /api/clientes?nome={nome} | Retornar todos os clientes com esse {nome} | ` ` | Array de Objetos Cliente | Mensagem de sucesso ou erro |
+| PUT | /api/clientes/{id} | Atualizar um cliente pelo | `{"nome":"novo nome", "dataCadastro":"2023-02-15 00:00:00"}` | Mensagem de sucesso ou erro |
+| DELETE | /api/clientes/{id} | Deletar um cliente pelo id | ` ` | | Mensagem de sucesso ou erro |
+| DELETE | /api/clientes/ | Deletar todos os clientes | ` ` | Mensagem de sucesso ou erro |
