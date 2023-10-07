@@ -25,9 +25,24 @@ spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
 ```
 
 Após a configuração, basta enviar requests HTTP para a porta que a API está escutando, como:
-```
-curl --location --request GET 'http://localhost:9090/api/clientes'
-```
+- Create
+    ```
+    curl --location --request POST 'http://localhost:9090/api/clientes' --header 'Content-Type: application/json' --data-raw '{"nome":"nome"}'
+    ```
+- Read
+    ```
+    curl --location --request GET 'http://localhost:9090/api/clientes'
+    ```
+- Update
+    ```
+    id=1
+    curl --location --request PUT 'http://localhost:9090/api/clientes/$id' --header 'Content-Type: application/json' --data-raw '{"nome":"novo nome", "dataCadastro":"2022-02-28 12:20:13"}'
+    ```
+- Delete
+    ```
+    id=1
+    curl --location --request GET 'http://localhost:9090/api/clientes/$id'
+    ```
 ___
 ### APIs
 A seguir estão as tabelas das APIs fornecidas:
