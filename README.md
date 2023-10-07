@@ -45,6 +45,61 @@ Após a configuração, basta enviar requests HTTP para a porta que a API está 
     curl --location --request GET 'http://localhost:9090/api/clientes/$id'
     ```
 ___
+### Banco de Dados
+
+Esse é o banco de dados implementado em postgres:
+```
+DROP TABLE IF EXISTS enderecos;
+DROP TABLE IF EXISTS clientes;
+
+
+CREATE TABLE clientes
+(
+    id BIGSERIAL PRIMARY KEY NOT NULL,
+    nome VARCHAR(255) NOT NULL,
+    data_cadastro TIMESTAMP
+);
+
+CREATE TABLE enderecos
+(
+    id BIGSERIAL PRIMARY KEY NOT NULL,
+    cep VARCHAR(255),
+    logradouro VARCHAR(255),
+    cidade VARCHAR(255),
+    numero VARCHAR(255),
+    complemento VARCHAR(255),
+    cliente_id BIGSERIAL NOT NULL,
+    CONSTRAINT fk_cliente
+        FOREIGN KEY(cliente_id)
+        REFERENCES clientes(id)
+);
+
+INSERT INTO enderecos (cep, logradouro, cidade, numero, complemento, cliente_id)
+VALUES ('08440-420', 'Rua Acutinga', 'São Paulo', '11', 'Bloco D, apartamento 55', 1);
+
+SELECT
+	cli_id, cli_nome, cli_data_cadastro
+FROM
+	clientes
+INNER JOIN enderecos ON cli_id = cliente_id
+WHERE cli_id=2;
+
+SELECT
+	id, cep, logradouro, numero, complemento, cliente_id
+FROM
+	enderecos
+JOIN clientes ON cliente_id = cli_id
+WHERE cliente_id=2;
+
+UPDATE enderecos SET 
+    cep = '08440-420', 
+    logradouro = 'Rua Acutinga', 
+    cidade = 'São Paulo', 
+    numero = '11', 
+    complemento = 'Bloco C, apartamento 33'
+WHERE id=1;
+```
+___
 ### APIs
 A seguir estão as tabelas das APIs fornecidas:
 

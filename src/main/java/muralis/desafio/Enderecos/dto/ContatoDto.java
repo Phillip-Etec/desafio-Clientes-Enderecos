@@ -1,0 +1,60 @@
+package muralis.desafio.Enderecos.dto;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import muralis.desafio.Enderecos.model.Endereco;
+
+public class ContatoDto {
+	
+	@Autowired
+	ModelMapper mapper = new ModelMapper();
+	
+private String tipo;
+	
+	private String texto;
+	
+	private long idCliente;
+
+	public ContatoDto(String tipo, String texto, long idCliente) {
+		super();
+		this.tipo = tipo;
+		this.texto = texto;
+		this.idCliente = idCliente;
+	}
+
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getTexto() {
+		return texto;
+	}
+
+	public void setTexto(String texto) {
+		this.texto = texto;
+	}
+
+	public long getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(long idCliente) {
+		this.idCliente = idCliente;
+	}
+	
+	public String toString() {
+		return "{ tipo: "+tipo+"; texto: "+texto+"; idCliente: "+idCliente+" }";
+	}
+	
+	public Endereco converterParaEndereco() {
+		Endereco endereco = this.mapper.map(this, Endereco.class);
+		
+		return endereco;
+	}
+}
