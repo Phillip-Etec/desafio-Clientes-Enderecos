@@ -21,99 +21,105 @@ import org.springframework.web.bind.annotation.RestController;
 
 import muralis.desafio.Enderecos.model.*;
 import muralis.desafio.Enderecos.repository.*;
+import muralis.desafio.Enderecos.dto.*;
 
 @CrossOrigin(origins = "http://localhost:9090")
 @RestController
 @RequestMapping("/api")
 public class ClienteController {
 
-  @Autowired
-  ClienteRepository repositorioDeCliente;
+	@Autowired
+  	ClienteRepository repositorioDeCliente;
+  
+  	@GetMapping("/clientes")
+	public ResponseEntity<List<Cliente>> getTodosOsClientes(@RequestParam(required = false) String nome) {
+  		try {
+  			List<Cliente> clientes = new ArrayList<Cliente>();
+  			
+  			if (nome == null)
+  				repositorioDeCliente.todosOsClientes().forEach(clientes::add);
+  			else
+  				repositorioDeCliente.encontrarPorNome(nome).forEach(clientes::add);
 
-  @GetMapping("/clientes")
-  public ResponseEntity<List<Cliente>> getTodosOsClientes(@RequestParam(required = false) String nome) {
-    try {
-      List<Cliente> tutorials = new ArrayList<Cliente>();
+  			if (clientes.isEmpty()) {
+  				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  			}
+  			
+  			return new ResponseEntity<>(clientes, HttpStatus.OK);
+  		} catch (Exception e) {
+  			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+  		}
+  	}
 
-      if (nome == null)
-    	  repositorioDeCliente.todosOsClientes().forEach(tutorials::add);
-      else
-    	  repositorioDeCliente.encontrarPorNome(nome).forEach(tutorials::add);
+  	@GetMapping("/clientes/{id}")
+	public ResponseEntity<Cliente> getClientePorId(@PathVariable("id") long id) {
+  		Cliente cliente = repositorioDeCliente.encontrarPorId(id);
+	
+  		if (cliente != null) {
+  			return new ResponseEntity<>(cliente, HttpStatus.OK);
+  		} 
+  		else {
+  			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  		}
+  	}
 
-      if (tutorials.isEmpty()) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-      }
+	@PostMapping("/clientes")
+	public ResponseEntity<String> createCliente(@RequestBody ClienteDto clienteDto) {
+		try {
+				if(clienteDto.getDataCadastro() == null)
+					clienteDto.setDataCadastro(LocalDateTime.now());
+	
+				repositorioDeCliente.salvar(clienteDto.converterParaCliente());
+				return new ResponseEntity<>("Cliente cadastrado com sucesso.", HttpStatus.CREATED);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-      return new ResponseEntity<>(tutorials, HttpStatus.OK);
-    } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  @GetMapping("/clientes/{id}")
-  public ResponseEntity<Cliente> getClientePorId(@PathVariable("id") long id) {
-    Cliente cliente = repositorioDeCliente.encontrarPorId(id);
-
-    if (cliente != null) {
-      return new ResponseEntity<>(cliente, HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-  }
-
-  @PostMapping("/clientes")
-  public ResponseEntity<String> createCliente(@RequestBody Cliente cliente) {
-	 try {
-		if(cliente.getDataCadastro() == null)
-			cliente.setDataCadastro(LocalDateTime.now());
+	@PutMapping("/clientes/{id}")
+		public ResponseEntity<String> updateCliente(@PathVariable("id") long id, @RequestBody ClienteDto clienteDto) {
+		Cliente _cliente = repositorioDeCliente.encontrarPorId(id);
 		
-    	repositorioDeCliente.salvar(new Cliente(cliente.getNome(), cliente.getDataCadastro()));
-    	return new ResponseEntity<>("Cliente cadastrado com sucesso.", HttpStatus.CREATED);
-    } 
-    catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
+		
+		if (_cliente != null) {
+			_cliente.setId(id);
+			_cliente.setNome(clienteDto.getNome());
+			_cliente.setDataCadastro(clienteDto.getDataCadastro());
+	    	
+			repositorioDeCliente.atualizar(_cliente);
+			return new ResponseEntity<>("Cliente atualizado com sucesso!.", HttpStatus.OK);
+		} 
+		else {
+			return new ResponseEntity<>("Não foi possível encontrar um cliente com id=" + id, HttpStatus.NOT_FOUND);
+		}
+	}
 
-  @PutMapping("/clientes/{id}")
-  public ResponseEntity<String> updateCliente(@PathVariable("id") long id, @RequestBody Cliente cliente) {
-    Cliente _cliente = repositorioDeCliente.encontrarPorId(id);
+	@DeleteMapping("/clientes/{id}")
+	public ResponseEntity<String> deleteCliente(@PathVariable("id") long id) {
+		try {
+			int resultado = repositorioDeCliente.deletarPorId(id);
+			if (resultado == 0) {
+				return new ResponseEntity<>("Não foi possível encontrar Cliente com id=" + id, HttpStatus.OK);
+			}
+			
+			return new ResponseEntity<>("Cliente deletado com sucesso.", HttpStatus.OK);
+		} 
+		catch (Exception e) {
+			return new ResponseEntity<>("Não foi possível deletar o Cliente.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-    if (_cliente != null) {
-    	_cliente.setId(id);
-    	_cliente.setNome(cliente.getNome());
-    	_cliente.setDataCadastro(cliente.getDataCadastro());
-
-      repositorioDeCliente.atualizar(_cliente);
-      return new ResponseEntity<>("Cliente atualizado com sucesso!.", HttpStatus.OK);
-    } 
-    else {
-      return new ResponseEntity<>("Não foi possível encontrar um cliente com id=" + id, HttpStatus.NOT_FOUND);
-    }
-  }
-
-  @DeleteMapping("/clientes/{id}")
-  public ResponseEntity<String> deleteCliente(@PathVariable("id") long id) {
-    try {
-      int resultado = repositorioDeCliente.deletarPorId(id);
-      if (resultado == 0) {
-        return new ResponseEntity<>("Não foi possível encontrar Cliente com id=" + id, HttpStatus.OK);
-      }
-      return new ResponseEntity<>("Cliente deletado com sucesso.", HttpStatus.OK);
-    } catch (Exception e) {
-      return new ResponseEntity<>("Não foi possível deletar o Cliente.", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  @DeleteMapping("/clientes")
-  public ResponseEntity<String> deletarTodosOsClientes() {
-    try {
-      int quantidadeDeletada = repositorioDeCliente.deletarTodos();
-      return new ResponseEntity<>(quantidadeDeletada + " Cliente(s) deletados com sucesso.", HttpStatus.OK);
-    } catch (Exception e) {
-      return new ResponseEntity<>("Não foi possível deletar nenhum Cliente.", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-  }
+	@DeleteMapping("/clientes")
+	public ResponseEntity<String> deletarTodosOsClientes() {
+		try {
+			int quantidadeDeletada = repositorioDeCliente.deletarTodos();
+			return new ResponseEntity<>(quantidadeDeletada + " Cliente(s) deletados com sucesso.", HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("Não foi possível deletar nenhum Cliente.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	
+	}
 
 }

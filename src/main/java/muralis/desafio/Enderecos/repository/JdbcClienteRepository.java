@@ -1,11 +1,10 @@
 package muralis.desafio.Enderecos.repository;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -13,36 +12,38 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import muralis.desafio.Enderecos.model.*;
+import muralis.desafio.Enderecos.dto.*;
 
 @Repository
 public class JdbcClienteRepository implements ClienteRepository {
 	@Autowired
-	  private JdbcTemplate jdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private ModelMapper mapper;
 
-	  @Override
-	  public int salvar(Cliente cliente ) {
-		  //DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-		  String data = cliente.getDataCadastro().toString();
+	@Override
+	public int salvar(Cliente cliente ) {
+		String data = tratarData(cliente.getDataCadastro());
 		  
-		  if(data.length() == "2023-01-01T00:00".length())
-			  data = data+":00";
-		  
-		  if(data.indexOf('.') == -1)
-			  data = data.replace('T', ' ');
-		  else 
-			  data = data.substring(0, data.indexOf('.')).replace('T', ' ');
-		  
-		  
-		  int criacao = jdbcTemplate.update("INSERT INTO clientes (nome, data_cadastro) VALUES(?, '"+data+"')",
-			        new Object[] { 	cliente.getNome()});
-		  //System.out.println("CODIGO:" + criacao);
-	    return criacao;
+		// o injector do jdbc não reconhece o tipo Timestamp do postgres, 
+		// portanto é necessário adicionar a data diretamente no query sql.
+		return jdbcTemplate.update("INSERT INTO clientes (nome, data_cadastro) VALUES(?, '"+data+"')",
+				new Object[] { cliente.getNome() });
 	  }
 
 	  @Override
 	  public int atualizar(Cliente cliente) {
-	    return jdbcTemplate.update("UPDATE clientes SET nome=? WHERE id=?",
-	        new Object[] { cliente.getNome(),  cliente.getId() });
+		  
+		  if(cliente.getDataCadastro() == null)
+			  return jdbcTemplate.update("UPDATE clientes SET nome=? WHERE id=?",
+				        new Object[] { cliente.getNome(),  cliente.getId() });
+		  else {
+			  String data = tratarData(cliente.getDataCadastro());
+			  return jdbcTemplate.update("UPDATE clientes SET nome=?, data_cadastro='"+data+"' WHERE id=?",
+				        new Object[] { cliente.getNome(),  cliente.getId() });
+		  }
+	    
 	  }
 
 	  @Override
@@ -50,9 +51,9 @@ public class JdbcClienteRepository implements ClienteRepository {
 	    try {
 	    	Cliente cliente = jdbcTemplate.queryForObject("SELECT * FROM clientes WHERE id=?",
 	          BeanPropertyRowMapper.newInstance(Cliente.class), id);
-
 	      return cliente;
-	    } catch (IncorrectResultSizeDataAccessException e) {
+	    } 
+	    catch (IncorrectResultSizeDataAccessException e) {
 	      return null;
 	    }
 	  }
@@ -64,19 +65,46 @@ public class JdbcClienteRepository implements ClienteRepository {
 
 	  @Override
 	  public List<Cliente> todosOsClientes() {
-	    return jdbcTemplate.query("SELECT * FROM clientes", BeanPropertyRowMapper.newInstance(Cliente.class));
+		  List<Cliente> clientes = jdbcTemplate.query("SELECT * FROM clientes", BeanPropertyRowMapper.newInstance(Cliente.class));
+		  
+	    return clientes;
 	  }
 
 
 	  @Override
 	  public List<Cliente> encontrarPorNome(String nome) {
 	    String SqlQuery = "SELECT * FROM clientes WHERE nome ILIKE '%" + nome + "%'";
+	    
+	    List<Cliente> clientes = jdbcTemplate.query(SqlQuery, BeanPropertyRowMapper.newInstance(Cliente.class));
+	    
+	    List<ClienteDto> clientesDto = new ArrayList<ClienteDto>();
+		  
+		  for(Cliente cliente: clientes) {
+			  clientesDto.add(this.mapper.map(cliente, ClienteDto.class));
+		  }
 
-	    return jdbcTemplate.query(SqlQuery, BeanPropertyRowMapper.newInstance(Cliente.class));
+	    return clientes;
 	  }
 
 	  @Override
 	  public int deletarTodos() {
 	    return jdbcTemplate.update("DELETE FROM clientes");
+	  }
+	  
+	  private String tratarData(LocalDateTime dataCliente) {
+		String data = dataCliente.toString();
+			
+		//quando as horas terminam em 00 segundos, a classe LocalDateTime retira os 2 ultimos digitos,
+		//e aqui é necessário adicionar de volta
+		if(data.length() == 16)
+			data = data+":00";
+		  
+		// tratamento da data para ficar compativel com timestamp de postgres
+		if(data.indexOf('.') == -1)
+			data = data.replace('T', ' ');
+		else 
+			data = data.substring(0, data.indexOf('.')).replace('T', ' ');
+		
+		return data;
 	  }
 }

@@ -3,6 +3,7 @@ package muralis.desafio.Enderecos.repository;
 import java.util.List;
 
 import muralis.desafio.Enderecos.model.*;
+import muralis.desafio.Enderecos.dto.*;
 
 public interface ClienteRepository {
 	int salvar(Cliente cliente);
