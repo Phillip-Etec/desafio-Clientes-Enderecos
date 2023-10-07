@@ -30,68 +30,62 @@ public class JdbcClienteRepository implements ClienteRepository {
 		// portanto é necessário adicionar a data diretamente no query sql.
 		return jdbcTemplate.update("INSERT INTO clientes (nome, data_cadastro) VALUES(?, '"+data+"')",
 				new Object[] { cliente.getNome() });
-	  }
+	}
 
-	  @Override
-	  public int atualizar(Cliente cliente) {
-		  
-		  if(cliente.getDataCadastro() == null)
-			  return jdbcTemplate.update("UPDATE clientes SET nome=? WHERE id=?",
-				        new Object[] { cliente.getNome(),  cliente.getId() });
-		  else {
-			  String data = tratarData(cliente.getDataCadastro());
-			  return jdbcTemplate.update("UPDATE clientes SET nome=?, data_cadastro='"+data+"' WHERE id=?",
-				        new Object[] { cliente.getNome(),  cliente.getId() });
-		  }
+	@Override
+	public int atualizar(Cliente cliente) {
+	
+		if(cliente.getDataCadastro() == null)
+			return jdbcTemplate.update("UPDATE clientes SET nome=? WHERE id=?",
+					new Object[] { cliente.getNome(),  cliente.getId() });
+		else {
+			String data = tratarData(cliente.getDataCadastro());
+			return jdbcTemplate.update("UPDATE clientes SET nome=?, data_cadastro='"+data+"' WHERE id=?",
+					new Object[] { cliente.getNome(),  cliente.getId() });
+		}
 	    
-	  }
+	}
 
-	  @Override
-	  public Cliente encontrarPorId(Long id) {
-	    try {
-	    	Cliente cliente = jdbcTemplate.queryForObject("SELECT * FROM clientes WHERE id=?",
-	          BeanPropertyRowMapper.newInstance(Cliente.class), id);
-	      return cliente;
-	    } 
-	    catch (IncorrectResultSizeDataAccessException e) {
-	      return null;
-	    }
-	  }
+	@Override
+	public Cliente encontrarPorId(Long id) {
+		try {
+			Cliente cliente = jdbcTemplate.queryForObject("SELECT * FROM clientes WHERE id=?",
+	        BeanPropertyRowMapper.newInstance(Cliente.class), id);
+			return cliente;
+		} 
+		catch (IncorrectResultSizeDataAccessException e) {
+			return null;
+		}
+	}
 
-	  @Override
-	  public int deletarPorId(Long id) {
-	    return jdbcTemplate.update("DELETE FROM clientes WHERE id=?", id);
-	  }
+	@Override
+	public int deletarPorId(Long id) {
+		return jdbcTemplate.update("DELETE FROM clientes WHERE id=?", id);
+	}
 
-	  @Override
-	  public List<Cliente> todosOsClientes() {
-		  List<Cliente> clientes = jdbcTemplate.query("SELECT * FROM clientes", BeanPropertyRowMapper.newInstance(Cliente.class));
-		  
-	    return clientes;
-	  }
+	@Override
+	public List<Cliente> todosOsClientes() {
+		List<Cliente> clientes = jdbcTemplate.query("SELECT * FROM clientes", BeanPropertyRowMapper.newInstance(Cliente.class));
+		
+		return clientes;
+	}
 
 
-	  @Override
-	  public List<Cliente> encontrarPorNome(String nome) {
-	    String SqlQuery = "SELECT * FROM clientes WHERE nome ILIKE '%" + nome + "%'";
-	    
-	    List<Cliente> clientes = jdbcTemplate.query(SqlQuery, BeanPropertyRowMapper.newInstance(Cliente.class));
-	    
-	    List<ClienteDto> clientesDto = new ArrayList<ClienteDto>();
-		  
-		  for(Cliente cliente: clientes) {
-			  clientesDto.add(this.mapper.map(cliente, ClienteDto.class));
-		  }
+	@Override
+	public List<Cliente> encontrarPorNome(String nome) {
+		String SqlQuery = "SELECT * FROM clientes WHERE nome ILIKE '%" + nome + "%'";
+		
+		List<Cliente> clientes = jdbcTemplate.query(SqlQuery, BeanPropertyRowMapper.newInstance(Cliente.class));
 
-	    return clientes;
-	  }
+		return clientes;
+	}
 
-	  @Override
-	  public int deletarTodos() {
-	    return jdbcTemplate.update("DELETE FROM clientes");
-	  }
-	  
-	  private String tratarData(LocalDateTime dataCliente) {
+	@Override
+	public int deletarTodos() {
+		return jdbcTemplate.update("DELETE FROM clientes");
+	}
+  
+	private String tratarData(LocalDateTime dataCliente) {
 		String data = dataCliente.toString();
 			
 		//quando as horas terminam em 00 segundos, a classe LocalDateTime retira os 2 ultimos digitos,
@@ -106,5 +100,5 @@ public class JdbcClienteRepository implements ClienteRepository {
 			data = data.substring(0, data.indexOf('.')).replace('T', ' ');
 		
 		return data;
-	  }
+	}
 }
