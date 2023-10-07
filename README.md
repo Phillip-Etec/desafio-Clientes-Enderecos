@@ -69,9 +69,9 @@ CREATE TABLE enderecos
     cidade VARCHAR(255),
     numero VARCHAR(255),
     complemento VARCHAR(255),
-    cliente_id BIGSERIAL NOT NULL,
+    idcliente BIGSERIAL NOT NULL,
     CONSTRAINT fk_cliente
-        FOREIGN KEY(cliente_id)
+        FOREIGN KEY(idcliente)
         REFERENCES clientes(id)
 );
 
@@ -80,9 +80,9 @@ CREATE TABLE contatos
     id BIGSERIAL PRIMARY KEY NOT NULL,
     tipo VARCHAR(255),
     texto VARCHAR(255),
-    cliente_id BIGSERIAL NOT NULL,
+    idcliente BIGSERIAL NOT NULL,
     CONSTRAINT fk_cliente
-        FOREIGN KEY(cliente_id)
+        FOREIGN KEY(idcliente)
         REFERENCES clientes(id)
 );
 ```
