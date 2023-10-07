@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import muralis.desafio.Enderecos.model.Contato;
 
 @Repository
-public class JdbcContatoRepository implements ContatoRepository {
+public class JdbcContatoRepository implements ContatoRepository { 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
@@ -22,7 +22,7 @@ public class JdbcContatoRepository implements ContatoRepository {
 
 	@Override
 	public int salvar(Contato contato ) {
-		return jdbcTemplate.update("INSERT INTO contatos (tipo, texto, idCliente) VALUES(?, ?, ?)",
+		return jdbcTemplate.update("INSERT INTO contatos (tipo, texto, cliente_id) VALUES(?, ?, ?)",
 				new Object[] { contato.getTipo(), contato.getTexto(), contato.getIdCliente()  });
 	}
 
@@ -37,7 +37,7 @@ public class JdbcContatoRepository implements ContatoRepository {
 	@Override
 	public Contato encontrarPorId(Long id) {
 		try {
-			Contato contato = jdbcTemplate.queryForObject("SELECT * FROM contatos WHERE id=?",
+			Contato contato = jdbcTemplate.queryForObject("SELECT id, tipo, texto, cliente_id FROM contatos WHERE id=?",
 	        BeanPropertyRowMapper.newInstance(Contato.class), id);
 			return contato;
 		} 
@@ -48,7 +48,7 @@ public class JdbcContatoRepository implements ContatoRepository {
 
 	@Override
 	public int deletarPorId(Long id) {
-		return jdbcTemplate.update("DELETE FROM clientes WHERE id=?", id);
+		return jdbcTemplate.update("DELETE FROM contatos WHERE id=?", id);
 	}
 
 	@Override
@@ -60,8 +60,8 @@ public class JdbcContatoRepository implements ContatoRepository {
 
 
 	@Override
-	public List<Contato> encontrarPorTexto(String nome) {
-		String SqlQuery = "SELECT * FROM contatos WHERE texto ILIKE '%" + nome + "%'";
+	public List<Contato> encontrarPorTexto(String texto) {
+		String SqlQuery = "SELECT * FROM contatos WHERE texto ILIKE '%" + texto + "%'";
 		
 		List<Contato> clientes = jdbcTemplate.query(SqlQuery, BeanPropertyRowMapper.newInstance(Contato.class));
 
@@ -72,6 +72,5 @@ public class JdbcContatoRepository implements ContatoRepository {
 	public int deletarTodos() {
 		return jdbcTemplate.update("DELETE FROM contatos");
 	}
-  
-	private String tratarData(LocalDateTime dataCliente) {
+
 }

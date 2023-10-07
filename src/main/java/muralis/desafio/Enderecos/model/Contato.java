@@ -17,6 +17,18 @@ public class Contato {
 		this.texto = texto;
 		this.idCliente = idCliente;
 	}
+	
+	public Contato(String tipo, String texto, long idCliente) {
+		super();
+		this.tipo = tipo;
+		this.texto = texto;
+		this.idCliente = idCliente;
+	}
+	
+
+	public Contato() {
+	
+	}
 
 	public long getId() {
 		return id;

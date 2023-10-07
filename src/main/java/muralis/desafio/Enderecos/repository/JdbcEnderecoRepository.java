@@ -45,7 +45,7 @@ public class JdbcEnderecoRepository implements EnderecoRepository {
 	@Override
 	public Endereco encontrarPorId(Long id) {
 		try {
-			Endereco endereco = jdbcTemplate.queryForObject("SELECT id, cep, logradouro, cidade, numero, complemento FROM enderecos WHERE id=?",
+			Endereco endereco = jdbcTemplate.queryForObject("SELECT id, cep, logradouro, cidade, numero, complemento, cliente_id FROM enderecos WHERE id=?",
 	        BeanPropertyRowMapper.newInstance(Endereco.class), id);
 			return endereco;
 		} 

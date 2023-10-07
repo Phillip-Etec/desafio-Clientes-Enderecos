@@ -94,35 +94,6 @@ public class EnderecoController {
 		}
 	}
 	
-	@PutMapping("/enderecos/{id}")
-	public ResponseEntity<String> updateEndereco(@PathVariable("id") long id, @RequestBody EnderecoDto enderecoDto) {
-		try {
-			Endereco _endereco = repositorioDeEndereco.encontrarPorId(id);
-			
-			if (_endereco != null) {
-				EnderecoViacep enderecoCompleto = getCep(enderecoDto.getCep().replace("-", ""));
-				
-				Endereco enderecoParaSalvar = 
-						new Endereco ( enderecoCompleto.getCep(),
-								enderecoCompleto.getLogradouro(),
-								enderecoCompleto.getLocalidade(),
-								enderecoDto.getNumero(),
-								enderecoDto.getComplemento()
-						);
-		    	
-				repositorioDeEndereco.atualizar(enderecoParaSalvar);
-				return new ResponseEntity<>("Cliente atualizado com sucesso!.", HttpStatus.OK);
-			} 
-			else {
-				return new ResponseEntity<>("Não foi possível encontrar um endereco com id=" + id, HttpStatus.NOT_FOUND);
-			}
-	
-		}
-		catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
 	@DeleteMapping("/enderecos/{id}")
 	public ResponseEntity<String> deleteEndereco(@PathVariable("id") long id) {
 		try {
