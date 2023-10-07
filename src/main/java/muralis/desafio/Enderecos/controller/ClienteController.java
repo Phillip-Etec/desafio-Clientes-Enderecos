@@ -1,5 +1,6 @@
 package muralis.desafio.Enderecos.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +64,9 @@ public class ClienteController {
   @PostMapping("/clientes")
   public ResponseEntity<String> createCliente(@RequestBody Cliente cliente) {
 	 try {
-    	
+		if(cliente.getDataCadastro() == null)
+			cliente.setDataCadastro(LocalDateTime.now());
+		
     	repositorioDeCliente.salvar(new Cliente(cliente.getNome(), cliente.getDataCadastro()));
     	return new ResponseEntity<>("Cliente cadastrado com sucesso.", HttpStatus.CREATED);
     } 
