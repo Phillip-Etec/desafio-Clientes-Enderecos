@@ -25,7 +25,7 @@ server.port = 9090
 spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
 ```
 
-Após a configuração, basta enviar requests HTTP para a porta que a API está escutando. Enviar requests HTTP podem ser feitas tanto com GUIs, como o [Postman](https://www.postman.com/), quanto por utilidades de linha de comando, como o curl, e aqui estão alguns exemplos de como usá-lo para fazer requests à esta API:
+Após a configuração, basta enviar requests HTTP para a porta que a API está escutando. Enviar requests HTTP podem ser feitas tanto com GUIs, como o [Postman](https://www.postman.com/), quanto por utilidades de linha de comando, como o [curl](https://curl.se/), e aqui estão alguns exemplos de como usá-lo para fazer requests à esta API:
 - Create
     ```bash
     curl --location --request POST 'http://localhost:9090/api/clientes' --header 'Content-Type: application/json' --data-raw '{"nome":"nome"}'
@@ -91,37 +91,44 @@ ___
 
 ## APIs
 
-A seguir estão as tabelas explicando as APIs fornecidas:
+A seguir estão as tabelas explicando os endpoints fornecidos:
 
+Obs: todos os objetos são objetos JSON.
 
-### API de Clientes:
+### Endpoints de Clientes:
 
 | Método  | Url |  Ação  | Exemplo Corpo JSON | Retorno |
-| :------: | :-- | :----- | :--------          | :------ |
+| :-----: | :-- | :---- | :--------           | :------ |
 | POST | /api/clientes | Criar um novo cliente | `{"nome":"nome", "dataCadastro":"2023-07-04 00:00:00"}` | Mensagem de sucesso ou erro |
-|  GET | /api/clientes | Retornar todos os clientes | ` ` | Array de Objetos Cliente | GET | /api/clientes/{id} | Retornar um cliente pelo id | ` ` | Objeto Cliente |
-| GET | /api/clientes?nome={nome} | Retornar todos os clientes com esse {nome} | ` ` | Array de Objetos Cliente | Mensagem de sucesso ou erro |
-| PUT | /api/clientes/{id} | Atualizar um cliente pelo | `{"nome":"novo nome", "dataCadastro":"2023-02-15 00:00:00"}` | Mensagem de sucesso ou erro |
+| GET  | /api/clientes | Retornar todos os clientes | ` ` | Array de Objetos Cliente | GET | /api/clientes/{id} | Retornar um cliente pelo id | ` ` | Objeto Cliente |
+| GET  | /api/clientes?nome={nome} | Retornar todos os clientes com esse {nome} | ` ` | Array de Objetos Cliente | Mensagem de sucesso ou erro |
+| PUT  | /api/clientes/{id} | Atualizar um cliente pelo | `{"nome":"novo nome", "dataCadastro":"2023-02-15 00:00:00"}` | Mensagem de sucesso ou erro |
 | DELETE | /api/clientes/{id} | Deletar um cliente pelo id | ` ` | Mensagem de sucesso ou erro |
 | DELETE | /api/clientes/ | Deletar todos os clientes | ` ` | Mensagem de sucesso ou erro |
 
-### API de Endereços:
+### Endpoints de Endereços:
 
 | Método  | Url |  Ação  | Exemplo Corpo JSON | Retorno |
-| :------: | :-- | :----- | :--------          | :------ |
+| :-----: | :-- | :---- | :--------           | :------ |
 | POST | /api/enderecos | Criar um novo endereço | `{"cep":"010010","complemento":"Segundo Andar","numero":"12B","idCliente":1}` | Mensagem de sucesso ou erro |
-|  GET | /api/enderecos | Retornar todos os enderecos | ` ` | Array de Objetos Cliente | GET | /api/enderecos/{id} | Retornar um endereco pelo id | ` ` | Objeto Cliente |
-| PUT | /api/enderecos/{id} | Atualizar um endereco pelo {id} | `{"cep":"010010","complemento":"","numero":"9","idCliente":2}` | Mensagem de sucesso ou erro |
-| DELETE | /api/enderecos/{id} | Deletar um endereco pelo id | ` ` | Mensagem de sucesso ou erro |
+| GET  | /api/enderecos | Retornar todos os enderecos | ` ` | Array de Objetos Cliente | 
+| GET  | /api/enderecos?idcliente={idcliente} | Retornar todos os enderecos vínculados ao cliente de id {idcliente} | ` ` | Array de Objetos Cliente | 
+| GET  | /api/enderecos/{id} | Retornar um endereco pelo id | ` ` | Objeto Cliente |
+| PUT  | /api/enderecos/{id} | Atualizar um endereco pelo {id} | `{"cep":"010010","complemento":"","numero":"9","idCliente":2}` | Mensagem de sucesso ou erro |
+| DELETE | /api/enderecos/{id} | Deletar um endereco pelo {id} | ` ` | Mensagem de sucesso ou erro |
 | DELETE | /api/enderecos/ | Deletar todos os enderecos | ` ` | Mensagem de sucesso ou erro |
-| GET | /api/enderecoviacep?cep={cep} | Pesquisar um endereço pelo CEP {cep} na API viacep | ` ` | Objeto EnderecoViacep |
+| GET  | /api/enderecoviacep?cep={cep} | Pesquisar um endereço pelo CEP {cep} na API viacep | ` ` | Objeto EnderecoViacep |
 
-### API de Contatos:
+### Endpoints de Contatos:
 
 | Método  | Url |  Ação  | Exemplo Corpo JSON | Retorno |
-| :------: | :-- | :----- | :--------          | :------ |
+| :-----: | :-- | :---- | :--------           | :------ |
 | POST | /api/contatos | Criar um novo contato | `{"texto":"guilherme.2753gmail.com","tipo":"email","idCliente":1}` | Mensagem de sucesso ou erro |
-|  GET | /api/contatos | Retornar todos os contatos | ` ` | Array de Objetos Contato | GET | /api/contatos/{id} | Retornar um contato pelo id | ` ` | Objeto Contato |
-| PUT | /api/contatos/{id} | Atualizar um contato pelo id | `{"texto":"william.2753gmail.com","tipo":"email","idCliente":1}` | Mensagem de sucesso ou erro |
+| GET  | /api/contatos | Retornar todos os contatos | ` ` | Array de Objetos Contato |
+| GET  | /api/contatos?idcliente={idcliente} | Retornar todos os contatos vínculados ao cliente de id {idcliente} | ` ` | Array de Objetos Contato |
+| GET  | /api/contatos/{id} | Retornar um contato pelo id | ` ` | Objeto Contato |
+| PUT  | /api/contatos/{id} | Atualizar um contato pelo id | `{"texto":"william.2753gmail.com","tipo":"email","idCliente":1}` | Mensagem de sucesso ou erro |
 | DELETE | /api/contatos/{id} | Deletar um cliente pelo id | ` ` | Mensagem de sucesso ou erro |
 | DELETE | /api/contatos/ | Deletar todos os clientes | ` ` | Mensagem de sucesso ou erro |
+
+___
