@@ -15,7 +15,7 @@ public interface ContatoRepository {
 	
 	List<Contato> todosOsContatos();
 	
-	//List<Contato> encontrarPorCliente(long idCliente);
+	List<Contato> encontrarPorCliente(long idCliente);
 	
 	List<Contato> encontrarPorTexto(String nome);
 	

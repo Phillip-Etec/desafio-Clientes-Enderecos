@@ -21,6 +21,8 @@ public class EnderecoViacep {
 	private String ddd;
 	
 	private String siafi;
+	
+	private boolean error = false;
 
 	public String getCep() {
 		return cep;
@@ -76,6 +78,14 @@ public class EnderecoViacep {
 
 	public void setIbge(String ibge) {
 		this.ibge = ibge;
+	}
+	
+	public void setError(boolean error) {
+		this.error = error;
+	}
+	
+	public boolean getError() {
+		return this.error;
 	}
 
 	public String getGia() {

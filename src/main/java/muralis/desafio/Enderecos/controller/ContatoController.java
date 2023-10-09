@@ -3,7 +3,9 @@ package muralis.desafio.Enderecos.controller;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,35 +36,53 @@ import muralis.desafio.Enderecos.model.Contato;
 public class ContatoController {
 	
 	@Autowired
+	ModelMapper mapper;
+	
+	@Autowired
   	ContatoRepository repositorioDeContato;
 	
 	@GetMapping("/contatos")
-	public ResponseEntity<List<Contato>> getTodosOsContatos() {
+	public ResponseEntity<List<ContatoDto>> getTodosOsContatos(@RequestParam(required = false) String idcliente) {
   		try {
   			List<Contato> contatos = new ArrayList<Contato>();
   			
-  			repositorioDeContato.todosOsContatos().forEach(contatos::add);
+  			if(idcliente == null)
+  				repositorioDeContato.todosOsContatos().forEach(contatos::add);
+  			else
+  				repositorioDeContato.encontrarPorCliente(Long.parseLong(idcliente)).forEach(contatos::add);
 
   			if (contatos.isEmpty()) {
+  				System.out.println("Tá vazio!!!");
   				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   			}
   			
-  			return new ResponseEntity<>(contatos, HttpStatus.OK);
+  			List<ContatoDto> respostaContatos = contatos.stream()
+  												.map(contato -> mapper.map(contato, ContatoDto.class))
+  												.collect(Collectors.toList());
+  			
+  			return new ResponseEntity<>(respostaContatos, HttpStatus.OK);
   		} catch (Exception e) {
+  			System.out.println(e.getMessage());
   			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
   		}
   	}
 	
 	@GetMapping("/contatos/{id}")
-	public ResponseEntity<Contato> getContatoPorId(@PathVariable("id") long id) {
-		Contato contato = repositorioDeContato.encontrarPorId(id);
-	
-  		if (contato != null) {
-  			return new ResponseEntity<>(contato, HttpStatus.OK);
-  		} 
-  		else {
-  			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-  		}
+	public ResponseEntity<ContatoDto> getContatoPorId(@PathVariable("id") long id) {
+		try {
+			Contato contato = repositorioDeContato.encontrarPorId(id);
+		
+	  		if (contato != null) {
+	  			ContatoDto respostaContato = mapper.map(contato, ContatoDto.class);
+	  			return new ResponseEntity<>(respostaContato, HttpStatus.OK);
+	  		} 
+	  		else
+	  			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+  		catch (Exception e) {
+  			System.out.println(e.getMessage());
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
   	}
 	
 	@PostMapping("/contatos")
@@ -81,25 +101,28 @@ public class ContatoController {
 			return new ResponseEntity<>("Contato cadastrado com sucesso.", HttpStatus.CREATED);
 		}
 		catch (Exception e) {
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
 	@PutMapping("/contatos/{id}")
 	public ResponseEntity<String> updateContato(@PathVariable("id") long id, @RequestBody ContatoDto contatoDto) {
-		Contato _contato = repositorioDeContato.encontrarPorId(id);
-		
-		
-		if (_contato != null) {
+		try {
+			Contato _contato = repositorioDeContato.encontrarPorId(id);
+			
+			if (_contato.getTexto() == null)
+				return new ResponseEntity<>("Não foi possível encontrar um Contato com id=" + id, HttpStatus.NOT_FOUND);
+			
 			_contato.setId(id);
 			_contato.setTexto(contatoDto.getTexto());
 			_contato.setTipo(contatoDto.getTipo());
 	    	
 			repositorioDeContato.atualizar(_contato);
 			return new ResponseEntity<>("Contato atualizado com sucesso!.", HttpStatus.OK);
-		} 
-		else {
-			return new ResponseEntity<>("Não foi possível encontrar um Contato com id=" + id, HttpStatus.NOT_FOUND);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("Não foi possível atualizar o contato. Erro:\n" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -114,7 +137,7 @@ public class ContatoController {
 			return new ResponseEntity<>("Contato deletado com sucesso.", HttpStatus.OK);
 		} 
 		catch (Exception e) {
-			return new ResponseEntity<>("Não foi possível deletar o Contato.", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Não foi possível deletar o Contato.Erro:\n" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -125,7 +148,7 @@ public class ContatoController {
 			return new ResponseEntity<>(quantidadeDeletada + " Contato(s) deletados com sucesso.", HttpStatus.OK);
 		}
 		catch (Exception e) {
-			return new ResponseEntity<>("Não foi possível deletar nenhum Contato.", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Não foi possível deletar nenhum Contato. Erro:\n" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	
 	}

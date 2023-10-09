@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import muralis.desafio.Enderecos.model.Contato;
+import muralis.desafio.Enderecos.model.Endereco;
 
 @Repository
 public class JdbcContatoRepository implements ContatoRepository { 
@@ -32,6 +33,15 @@ public class JdbcContatoRepository implements ContatoRepository {
 			return jdbcTemplate.update("UPDATE contatos SET texto=?, tipo=?  WHERE id=?",
 					new Object[] { contato.getTexto(),contato.getTipo(), contato.getId() });
 	    
+	}
+	
+	@Override
+	public List<Contato> encontrarPorCliente(long idCliente) {
+		String SqlQuery = "SELECT * FROM contatos JOIN clientes ON idcliente = clientes.id WHERE idcliente="+idCliente+";";
+		
+		List<Contato> contatos = jdbcTemplate.query(SqlQuery, BeanPropertyRowMapper.newInstance(Contato.class));
+
+		return contatos;
 	}
 
 	@Override

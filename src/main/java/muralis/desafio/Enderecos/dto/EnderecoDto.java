@@ -7,10 +7,14 @@ import muralis.desafio.Enderecos.model.Endereco;
 
 public class EnderecoDto {
 	
-	@Autowired
-	ModelMapper mapper = new ModelMapper();
+	
+	private long id;
 	
 	private String cep;
+	
+	private String logradouro;
+	
+	private String cidade;
 	
 	private String numero;
 	
@@ -34,7 +38,7 @@ public class EnderecoDto {
 		setIdCliente(idCliente);
 	}
 	
-	public EnderecoDto(String cep, String numero, String complemento, long idCliente) {
+	public EnderecoDto(String cep, String complemento, String numero, long idCliente) {
 		setCep(cep);
 		setComplemento(complemento);
 		setNumero(numero);
@@ -50,6 +54,14 @@ public class EnderecoDto {
 		setIdCliente(idCliente);
 	}
 	
+	public EnderecoDto(String cep, String logradouro, String cidade, String numero, String complemento) {
+		setCep(cep);
+		setLogradouro(logradouro);
+		setCidade(cidade);
+		setNumero(numero);
+		setComplemento(complemento);
+	}
+	
 	public EnderecoDto(long id, String cep, String logradouro, String cidade, String numero, String complemento, long idCliente) {
 		setId(idCliente);
 		setCep(cep);
@@ -61,6 +73,11 @@ public class EnderecoDto {
 	}
 	
 	public void setId(long id) {
+		this.id = id;
+	}
+	
+	public long getId() {
+		return id;
 	}
 	
 	public void setIdCliente(long idCliente) {
@@ -85,10 +102,20 @@ public class EnderecoDto {
 		this.cep = cep;
 	}
 
+	public String getLogradouro() {
+		return logradouro;
+	}
+
 	public void setLogradouro(String logradouro) {
+		this.logradouro = logradouro;
+	}
+
+	public String getCidade() {
+		return cidade;
 	}
 
 	public void setCidade(String cidade) {
+		this.cidade = cidade;
 	}
 
 	public String getNumero() {
@@ -109,13 +136,7 @@ public class EnderecoDto {
 	
 	@Override
 	public String toString() {
-		return "Endereço { cep: "+cep+"; numero"+numero+"; complemento: "+complemento+"; idCliente: "+idCliente+" }";
-	}
-	
-	public Endereco converterParaEndereco() {
-		Endereco endereco = this.mapper.map(this, Endereco.class);
-		
-		return endereco;
+		return "Endereço { id: "+id+"; cep: "+cep+"; logradouro: "+logradouro+"; cidade: "+cidade+"; numero"+numero+"; complemento: "+complemento+"; idCliente: "+idCliente+" }";
 	}
 	
 }

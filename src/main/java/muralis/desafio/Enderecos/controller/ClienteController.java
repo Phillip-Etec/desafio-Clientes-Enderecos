@@ -3,7 +3,9 @@ package muralis.desafio.Enderecos.controller;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +29,15 @@ import muralis.desafio.Enderecos.dto.*;
 @RestController
 @RequestMapping("/api")
 public class ClienteController {
+	
+	@Autowired
+	private ModelMapper mapper;
 
 	@Autowired
   	ClienteRepository repositorioDeCliente;
   
   	@GetMapping("/clientes")
-	public ResponseEntity<List<Cliente>> getTodosOsClientes(@RequestParam(required = false) String nome) {
+	public ResponseEntity<List<ClienteDto>> getTodosOsClientes(@RequestParam(required = false) String nome) {
   		try {
   			List<Cliente> clientes = new ArrayList<Cliente>();
   			
@@ -45,22 +50,31 @@ public class ClienteController {
   				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   			}
   			
-  			return new ResponseEntity<>(clientes, HttpStatus.OK);
+  			List<ClienteDto> respostaClientes = clientes.stream()
+  												.map(cliente -> mapper.map(cliente, ClienteDto.class))
+  												.collect(Collectors.toList());
+  			
+  			return new ResponseEntity<>(respostaClientes, HttpStatus.OK);
   		} catch (Exception e) {
   			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
   		}
   	}
 
   	@GetMapping("/clientes/{id}")
-	public ResponseEntity<Cliente> getClientePorId(@PathVariable("id") long id) {
-  		Cliente cliente = repositorioDeCliente.encontrarPorId(id);
-	
-  		if (cliente != null) {
-  			return new ResponseEntity<>(cliente, HttpStatus.OK);
-  		} 
-  		else {
-  			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<ClienteDto> getClientePorId(@PathVariable("id") long id) {
+  		try {
+	  		Cliente cliente = repositorioDeCliente.encontrarPorId(id);
+		
+	  		if (cliente != null) {
+	  			ClienteDto respostaCliente = mapper.map(cliente, ClienteDto.class);
+	  			return new ResponseEntity<>(respostaCliente, HttpStatus.OK);
+	  		}
+	  		else
+	  			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   		}
+  		catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
   	}
 
 	@PostMapping("/clientes")
@@ -69,11 +83,11 @@ public class ClienteController {
 				if(clienteDto.getDataCadastro() == null)
 					clienteDto.setDataCadastro(LocalDateTime.now());
 	
-				repositorioDeCliente.salvar(clienteDto.converterParaCliente());
+				repositorioDeCliente.salvar(mapper.map(clienteDto, Cliente.class));
 				return new ResponseEntity<>("Cliente cadastrado com sucesso.", HttpStatus.CREATED);
 		}
 		catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Não foi possível cadastrar o cliente. Erro:\n" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -89,7 +103,7 @@ public class ClienteController {
 	    	
 			repositorioDeCliente.atualizar(_cliente);
 			return new ResponseEntity<>("Cliente atualizado com sucesso!.", HttpStatus.OK);
-		} 
+		}
 		else {
 			return new ResponseEntity<>("Não foi possível encontrar um cliente com id=" + id, HttpStatus.NOT_FOUND);
 		}
@@ -106,7 +120,7 @@ public class ClienteController {
 			return new ResponseEntity<>("Cliente deletado com sucesso.", HttpStatus.OK);
 		} 
 		catch (Exception e) {
-			return new ResponseEntity<>("Não foi possível deletar o Cliente.", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Não foi possível deletar o Cliente. Erro: "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

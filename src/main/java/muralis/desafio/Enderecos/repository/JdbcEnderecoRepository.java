@@ -73,7 +73,7 @@ public class JdbcEnderecoRepository implements EnderecoRepository {
 	
 	@Override
 	public List<Endereco> encontrarPorCliente(long idCliente) {
-		String SqlQuery = "SELECT id, cep, logradouro, numero, complemento, cliente_id FROM enderecos JOIN clientes ON idcliente = clientes(id) WHERE cliente_id="+idCliente+";";
+		String SqlQuery = "SELECT * FROM enderecos JOIN clientes ON idcliente = clientes.id WHERE idcliente="+idCliente+";";
 		
 		List<Endereco> enderecos = jdbcTemplate.query(SqlQuery, BeanPropertyRowMapper.newInstance(Endereco.class));
 

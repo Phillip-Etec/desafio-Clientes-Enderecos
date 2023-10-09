@@ -10,11 +10,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import muralis.desafio.Enderecos.model.Cliente;
 
 public class ClienteDto {
+	
+	private long id;
 
 	private String nome;
-	
-	@Autowired
-	ModelMapper mapper = new ModelMapper();
 	
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime dataCadastro;
@@ -71,10 +70,15 @@ public class ClienteDto {
 	}
 
 	public void setId(long id) {
+		this.id = id;
 	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public long getId() {
+		return this.id;
 	}
 
 	public void setDataCadastro(LocalDateTime dataCadastro) {
@@ -85,9 +89,5 @@ public class ClienteDto {
 	public String toString() {
 		return "Cliente [ nome: " + nome + "; dataCadastro: " + dataCadastro.toString();
 	}
-	public Cliente converterParaCliente() {
-		Cliente cliente = this.mapper.map(this, Cliente.class);
-		
-		return cliente;
-	}
+
 }

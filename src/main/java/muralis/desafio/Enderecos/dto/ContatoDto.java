@@ -7,14 +7,15 @@ import muralis.desafio.Enderecos.model.Endereco;
 
 public class ContatoDto {
 	
-	@Autowired
-	ModelMapper mapper = new ModelMapper();
-	
-private String tipo;
+	private String tipo;
 	
 	private String texto;
 	
 	private long idCliente;
+	
+	public ContatoDto() {
+		
+	}
 
 	public ContatoDto(String tipo, String texto, long idCliente) {
 		super();
@@ -50,11 +51,5 @@ private String tipo;
 	
 	public String toString() {
 		return "{ tipo: "+tipo+"; texto: "+texto+"; idCliente: "+idCliente+" }";
-	}
-	
-	public Endereco converterParaEndereco() {
-		Endereco endereco = this.mapper.map(this, Endereco.class);
-		
-		return endereco;
 	}
 }
