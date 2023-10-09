@@ -36,13 +36,11 @@ Após a configuração, basta enviar requests HTTP para a porta que a API está 
     ```
 - Update
     ```bash
-    id=1
-    curl --location --request PUT 'http://localhost:9090/api/clientes/$id' --header 'Content-Type: application/json' --data-raw '{"nome":"novo nome"}'
+    id=1 && curl --location --request PUT "http://localhost:9090/api/clientes/$id" --header 'Content-Type: application/json' --data-raw '{"nome":"novo nome"}'
     ```
 - Delete
     ```bash
-    id=1
-    curl --location --request GET 'http://localhost:9090/api/clientes/$id'
+    id=1 && curl --location --request GET "http://localhost:9090/api/clientes/$id"
     ```
 ___
 ### Banco de Dados
@@ -104,7 +102,7 @@ Obs: todos os objetos são objetos JSON.
 | GET  | /api/clientes?nome={nome} | Retornar todos os clientes com esse {nome} | ` ` | Array de Objetos Cliente | Mensagem de sucesso ou erro |
 | PUT  | /api/clientes/{id} | Atualizar um cliente pelo | `{"nome":"novo nome"}` | Mensagem de sucesso ou erro |
 | DELETE | /api/clientes/{id} | Deletar um cliente pelo id | ` ` | Mensagem de sucesso ou erro |
-| DELETE | /api/clientes/ | Deletar todos os clientes | ` ` | Mensagem de sucesso ou erro |
+| DELETE | /api/clientes | Deletar todos os clientes | ` ` | Mensagem de sucesso ou erro |
 
 ### Endpoints de Endereços:
 
@@ -114,9 +112,9 @@ Obs: todos os objetos são objetos JSON.
 | GET  | /api/enderecos | Retornar todos os enderecos | ` ` | Array de Objetos Cliente | 
 | GET  | /api/enderecos?idcliente={idcliente} | Retornar todos os enderecos vínculados ao cliente de id {idcliente} | ` ` | Array de Objetos Cliente | 
 | GET  | /api/enderecos/{id} | Retornar um endereco pelo id | ` ` | Objeto Cliente |
-| PUT  | /api/enderecos/{id} | Atualizar um endereco pelo {id} | `{"cep":"010010","complemento":"","numero":"9","idCliente":2}` | Mensagem de sucesso ou erro |
+| PUT  | /api/enderecos/{id} | Atualizar um endereco pelo {id} | `{"cep":"010010","complemento":"Bloco B","numero":"9","idCliente":2}` | Mensagem de sucesso ou erro |
 | DELETE | /api/enderecos/{id} | Deletar um endereco pelo {id} | ` ` | Mensagem de sucesso ou erro |
-| DELETE | /api/enderecos/ | Deletar todos os enderecos | ` ` | Mensagem de sucesso ou erro |
+| DELETE | /api/enderecos | Deletar todos os enderecos | ` ` | Mensagem de sucesso ou erro |
 | GET  | /api/enderecoviacep?cep={cep} | Pesquisar um endereço pelo CEP {cep} na API viacep | ` ` | Objeto EnderecoViacep |
 
 ### Endpoints de Contatos:
@@ -129,6 +127,6 @@ Obs: todos os objetos são objetos JSON.
 | GET  | /api/contatos/{id} | Retornar um contato pelo id | ` ` | Objeto Contato |
 | PUT  | /api/contatos/{id} | Atualizar um contato pelo id | `{"texto":"william.2753gmail.com","tipo":"email","idCliente":1}` | Mensagem de sucesso ou erro |
 | DELETE | /api/contatos/{id} | Deletar um cliente pelo id | ` ` | Mensagem de sucesso ou erro |
-| DELETE | /api/contatos/ | Deletar todos os clientes | ` ` | Mensagem de sucesso ou erro |
+| DELETE | /api/contatos | Deletar todos os clientes | ` ` | Mensagem de sucesso ou erro |
 
 ___
