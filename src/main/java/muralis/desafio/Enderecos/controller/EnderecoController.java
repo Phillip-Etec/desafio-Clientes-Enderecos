@@ -35,7 +35,6 @@ public class EnderecoController {
 	@Autowired
 	ModelMapper mapper;
 	
-	
 	@Autowired
   	EnderecoRepository repositorioDeEndereco;
 	
