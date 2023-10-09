@@ -17,9 +17,6 @@ import muralis.desafio.Enderecos.model.Endereco;
 public class JdbcContatoRepository implements ContatoRepository { 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-	
-	@Autowired
-	private ModelMapper mapper;
 
 	@Override
 	public int salvar(Contato contato ) {

@@ -35,14 +35,14 @@ public class JdbcClienteRepository implements ClienteRepository {
 	@Override
 	public int atualizar(Cliente cliente) {
 	
-		if(cliente.getDataCadastro() == null)
+//		if(cliente.getDataCadastro() == null)
 			return jdbcTemplate.update("UPDATE clientes SET nome=? WHERE id=?",
 					new Object[] { cliente.getNome(),  cliente.getId() });
-		else {
-			String data = tratarData(cliente.getDataCadastro());
-			return jdbcTemplate.update("UPDATE clientes SET nome=?, data_cadastro='"+data+"' WHERE id=?",
-					new Object[] { cliente.getNome(),  cliente.getId() });
-		}
+//		//else {
+//			String data = tratarData(cliente.getDataCadastro());
+//			return jdbcTemplate.update("UPDATE clientes SET nome=?, data_cadastro='"+data+"' WHERE id=?",
+//					new Object[] { cliente.getNome(),  cliente.getId() });
+//		}
 	    
 	}
 
