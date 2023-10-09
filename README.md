@@ -1,6 +1,9 @@
 # Desafio Backend Muralis Java
 Esse repositório contém a solução para o desafio back-end da Muralis de Java Spring Boot.
 O projeto é uma API restful, que recebe requests HTTP e manipula um banco de dados PostgresSQL.
+
+Esse branch foi criado especificamente para separar o tipo de contato do contato em si em 2 objetos no código em java e 2 entidades no banco de dados, normalizando-o.
+As respostas HTTP da API continuam funcionando da mesma forma, porém os requests HTTP dos métodos POST e PUT referentes aos contatos passam a ter o atributo `tipoContatoId` devido ao decoplamento.
 ___
 ## Iniciando
 Dependências:
@@ -51,6 +54,7 @@ Esse é o banco de dados implementado em postgres:
 ```sql
 DROP TABLE IF EXISTS enderecos;
 DROP TABLE IF EXISTS contatos;
+DROP TABLE IF EXISTS tipo_contato;
 DROP TABLE IF EXISTS clientes;
 
 
@@ -59,6 +63,12 @@ CREATE TABLE clientes
     id BIGSERIAL PRIMARY KEY NOT NULL,
     nome VARCHAR(255) NOT NULL,
     data_cadastro TIMESTAMP
+);
+
+CREATE TABLE tipo_contato
+(
+    id BIGSERIAL PRIMARY KEY NOT NULL,
+    tipo VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE enderecos
@@ -78,12 +88,15 @@ CREATE TABLE enderecos
 CREATE TABLE contatos
 (
     id BIGSERIAL PRIMARY KEY NOT NULL,
-    tipo VARCHAR(255),
+    idtipocontato BIGSERIAL NOT NULL,
     texto VARCHAR(255),
     idcliente BIGSERIAL NOT NULL,
     CONSTRAINT fk_cliente
         FOREIGN KEY(idcliente)
-        REFERENCES clientes(id)
+        REFERENCES clientes(id),
+    CONSTRAINT fk_tipo_contato
+        FOREIGN KEY(idtipocontato)
+        REFERENCES tipo_contato(id)
 );
 ```
 
