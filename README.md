@@ -97,7 +97,14 @@ CREATE TABLE contatos
             REFERENCES tipo_contato(id)
 );
 ```
-
+Tipos de contatos já cadastrados:
+|  id  | tipo     |
+| :--: | :------- |
+|  1   | 'e-mail' |
+|  2   | 'telefone fixo' |
+|  3   | 'celular' |
+|  4   | 'whatsapp' |
+|  5   | 'website' |
 ___
 
 ## APIs
