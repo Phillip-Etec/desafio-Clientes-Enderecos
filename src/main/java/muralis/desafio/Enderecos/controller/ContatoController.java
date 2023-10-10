@@ -118,6 +118,11 @@ public class ContatoController {
 	@PutMapping("/contatos/{id}")
 	public ResponseEntity<String> updateContato(@PathVariable("id") long id, @RequestBody ContatoDto contatoDto) {
 		try {
+			TipoContato tipoDeContato = repositorioDeTipoDeContato.encontrarPorNome(contatoDto.getTipo()).get(0);
+			
+			if(tipoDeContato == null)
+				return new ResponseEntity<>("Tipo de Contato inexistente.", HttpStatus.NOT_FOUND);
+			
 			Contato _contato = repositorioDeContato.encontrarPorId(id);
 			
 			if (_contato.getTexto() == null)
@@ -125,7 +130,7 @@ public class ContatoController {
 			
 			_contato.setId(id);
 			_contato.setTexto(contatoDto.getTexto());
-			_contato.setTipo(contatoDto.getTipo());
+			_contato.setTipo(tipoDeContato);
 	    	
 			repositorioDeContato.atualizar(_contato);
 			return new ResponseEntity<>("Contato atualizado com sucesso!.", HttpStatus.OK);
