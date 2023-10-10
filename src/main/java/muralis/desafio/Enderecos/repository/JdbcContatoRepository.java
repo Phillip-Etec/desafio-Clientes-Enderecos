@@ -43,7 +43,7 @@ public class JdbcContatoRepository implements ContatoRepository {
 		String SqlQuery = "SELECT * FROM contatos JOIN clientes ON idcliente = clientes.id WHERE idcliente="+idCliente+";";
 		
 		List<Contato> contatos = jdbcTemplate.query(SqlQuery, BeanPropertyRowMapper.newInstance(Contato.class));
-		idsTiposDeContatos = contatos.stream().map(contato -> contato.getIdCliente()).collect(Collectors.toList());
+		idsTiposDeContatos = contatos.stream().map(contato -> contato.getIdTipoContato()).collect(Collectors.toList());
 		
 		for(int i=0; i<contatos.size(); i++)
 			contatos.get(i).setTipo(repositorioDeTiposDeContatos.encontrarPorId(idsTiposDeContatos.get(i)));;
@@ -77,7 +77,7 @@ public class JdbcContatoRepository implements ContatoRepository {
 		List<Long> idsTiposDeContatos;
 		List<Contato> contatos = jdbcTemplate.query("SELECT * FROM contatos", BeanPropertyRowMapper.newInstance(Contato.class));
 		
-		idsTiposDeContatos = contatos.stream().map(contato -> contato.getIdCliente()).collect(Collectors.toList());
+		idsTiposDeContatos = contatos.stream().map(contato -> contato.getIdTipoContato()).collect(Collectors.toList());
 		
 		for(int i=0; i<contatos.size(); i++)
 			contatos.get(i).setTipo(repositorioDeTiposDeContatos.encontrarPorId(idsTiposDeContatos.get(i)));;
@@ -92,7 +92,7 @@ public class JdbcContatoRepository implements ContatoRepository {
 		List<Long> idsTiposDeContatos;
 		List<Contato> contatos = jdbcTemplate.query(SqlQuery, BeanPropertyRowMapper.newInstance(Contato.class));
 		
-		idsTiposDeContatos = contatos.stream().map(contato -> contato.getIdCliente()).collect(Collectors.toList());
+		idsTiposDeContatos = contatos.stream().map(contato -> contato.getIdTipoContato()).collect(Collectors.toList());
 		
 		for(int i=0; i<contatos.size(); i++)
 			contatos.get(i).setTipo(repositorioDeTiposDeContatos.encontrarPorId(idsTiposDeContatos.get(i)));;
