@@ -56,10 +56,8 @@ public class ContatoController {
   			else
   				repositorioDeContato.encontrarPorCliente(Long.parseLong(idcliente)).forEach(contatos::add);
 
-  			if (contatos.isEmpty()) {
-  				System.out.println("Tá vazio!!!");
+  			if (contatos.isEmpty())
   				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-  			}
   			
   			List<ContatoDto> respostaContatos = contatos.stream()
   												.map(contato -> mapper.map(contato, ContatoDto.class))
@@ -118,7 +116,14 @@ public class ContatoController {
 	@PutMapping("/contatos/{id}")
 	public ResponseEntity<String> updateContato(@PathVariable("id") long id, @RequestBody ContatoDto contatoDto) {
 		try {
-			TipoContato tipoDeContato = repositorioDeTipoDeContato.encontrarPorNome(contatoDto.getTipo()).get(0);
+			List<TipoContato> tipoDeContato = repositorioDeTipoDeContato.encontrarPorNome(contatoDto.getTipo());
+			
+			for(TipoContato tipoC: tipoDeContato) {
+				System.out.println(tipoC.toString());
+				System.out.println(tipoDeContato.indexOf(tipoC));
+			}
+			
+			System.out.println(tipoDeContato.get(0).toString());
 			
 			if(tipoDeContato == null)
 				return new ResponseEntity<>("Tipo de Contato inexistente.", HttpStatus.NOT_FOUND);
@@ -130,7 +135,7 @@ public class ContatoController {
 			
 			_contato.setId(id);
 			_contato.setTexto(contatoDto.getTexto());
-			_contato.setTipo(tipoDeContato);
+			_contato.setTipo(tipoDeContato.get(0));
 	    	
 			repositorioDeContato.atualizar(_contato);
 			return new ResponseEntity<>("Contato atualizado com sucesso!.", HttpStatus.OK);

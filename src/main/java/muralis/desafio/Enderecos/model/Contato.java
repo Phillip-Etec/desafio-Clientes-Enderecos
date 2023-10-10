@@ -6,6 +6,8 @@ public class Contato {
 	
 	private TipoContato tipo;
 	
+	private long idTipoContato;
+	
 	private String texto;
 	
 	private long idCliente;
@@ -52,6 +54,14 @@ public class Contato {
 
 	public void setTipo(TipoContato tipo) {
 		this.tipo = tipo;
+	}
+	
+	public void setIdTipoContato(long idTipoContato) {
+		this.idTipoContato = idTipoContato;
+	}
+	
+	public long getIdTipoContato() {
+		return idTipoContato;
 	}
 
 	public String getTexto() {

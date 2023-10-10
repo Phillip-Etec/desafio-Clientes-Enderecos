@@ -22,7 +22,7 @@ public class EnderecoViacep {
 	
 	private String siafi;
 	
-	private boolean error = false;
+	private boolean erro;
 
 	public String getCep() {
 		return cep;
@@ -80,12 +80,12 @@ public class EnderecoViacep {
 		this.ibge = ibge;
 	}
 	
-	public void setError(boolean error) {
-		this.error = error;
+	public void setErro(boolean erro) {
+		this.erro = erro;
 	}
 	
-	public boolean getError() {
-		return this.error;
+	public boolean getErro() {
+		return this.erro;
 	}
 
 	public String getGia() {

@@ -108,7 +108,7 @@ public class EnderecoController {
 				return new ResponseEntity<>("Erro na API viacep.", HttpStatus.SERVICE_UNAVAILABLE);
 			}
 			
-			else if(enderecoCompleto.getError()) {
+			else if(enderecoCompleto.getErro()) {
 				return new ResponseEntity<>("CEP inválido.", HttpStatus.NOT_FOUND);
 			}
 			
