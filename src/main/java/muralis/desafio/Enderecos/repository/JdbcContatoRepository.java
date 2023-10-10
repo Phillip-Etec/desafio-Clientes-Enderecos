@@ -60,9 +60,9 @@ public class JdbcContatoRepository implements ContatoRepository {
 
 	@Override
 	public List<Contato> todosOsContatos() {
-		List<Contato> clientes = jdbcTemplate.query("SELECT * FROM contatos", BeanPropertyRowMapper.newInstance(Contato.class));
+		List<Contato> contatos = jdbcTemplate.query("SELECT * FROM contatos", BeanPropertyRowMapper.newInstance(Contato.class));
 		
-		return clientes;
+		return contatos;
 	}
 
 
