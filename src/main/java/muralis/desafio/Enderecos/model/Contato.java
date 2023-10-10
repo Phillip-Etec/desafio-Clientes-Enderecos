@@ -4,13 +4,13 @@ public class Contato {
 	
 	private long id;
 	
-	private String tipo;
+	private TipoContato tipo;
 	
 	private String texto;
 	
 	private long idCliente;
 
-	public Contato(long id, String tipo, String texto, long idCliente) {
+	public Contato(long id, TipoContato tipo, String texto, long idCliente) {
 		super();
 		this.id = id;
 		this.tipo = tipo;
@@ -18,9 +18,17 @@ public class Contato {
 		this.idCliente = idCliente;
 	}
 	
-	public Contato(String tipo, String texto, long idCliente) {
+	public Contato(TipoContato tipo, String texto, long idCliente) {
 		super();
 		this.tipo = tipo;
+		this.texto = texto;
+		this.idCliente = idCliente;
+	}
+	
+	public Contato(String tipo, String texto, long idCliente) {
+		super();
+		TipoContato tipoContato = new TipoContato(tipo);
+		this.tipo = tipoContato;
 		this.texto = texto;
 		this.idCliente = idCliente;
 	}
@@ -38,11 +46,11 @@ public class Contato {
 		this.id = id;
 	}
 
-	public String getTipo() {
+	public TipoContato getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(String tipo) {
+	public void setTipo(TipoContato tipo) {
 		this.tipo = tipo;
 	}
 
@@ -63,7 +71,7 @@ public class Contato {
 	}
 	
 	public String toString() {
-		return "{ id: +"+id+"; tipo: "+tipo+"; texto: "+texto+"; idCliente: "+idCliente+" }";
+		return "{ id: +"+id+"; tipo: "+tipo.getTipo()+"; texto: "+texto+"; idCliente: "+idCliente+" }";
 	}
 	
 }

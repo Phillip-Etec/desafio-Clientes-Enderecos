@@ -39,11 +39,13 @@ Após a configuração, basta enviar requests HTTP para a porta que a API está 
     ```
 - Update
     ```bash
-    id=1 && curl --location --request PUT "http://localhost:9090/api/clientes/$id" --header 'Content-Type: application/json' --data-raw '{"nome":"novo nome", "dataCadastro":"2022-02-28 12:20:13"}'
+    id=1
+    curl --location --request PUT 'http://localhost:9090/api/clientes/$id' --header 'Content-Type: application/json' --data-raw '{"nome":"novo nome", "dataCadastro":"2022-02-28 12:20:13"}'
     ```
 - Delete
     ```bash
-    id=1 && curl --location --request GET "http://localhost:9090/api/clientes/$id"
+    id=1
+    curl --location --request GET 'http://localhost:9090/api/clientes/$id'
     ```
 ___
 ### Banco de Dados
@@ -60,7 +62,7 @@ CREATE TABLE clientes
 (
     id BIGSERIAL PRIMARY KEY NOT NULL,
     nome VARCHAR(255) NOT NULL,
-    data_cadastro TIMESTAMP NOT NULL
+    data_cadastro TIMESTAMP
 );
 
 CREATE TABLE tipo_contato
@@ -72,29 +74,29 @@ CREATE TABLE tipo_contato
 CREATE TABLE enderecos
 (
     id BIGSERIAL PRIMARY KEY NOT NULL,
-    cep VARCHAR(255) NOT NULL,
-    logradouro VARCHAR(255) NOT NULL,
-    cidade VARCHAR(255) NOT NULL,
-    numero VARCHAR(255) NOT NULL,
-    complemento VARCHAR(255) NOT NULL,
+    cep VARCHAR(255),
+    logradouro VARCHAR(255),
+    cidade VARCHAR(255),
+    numero VARCHAR(255),
+    complemento VARCHAR(255),
     idcliente BIGSERIAL NOT NULL,
     CONSTRAINT fk_cliente
         FOREIGN KEY(idcliente)
-            REFERENCES clientes(id)
+        REFERENCES clientes(id)
 );
 
 CREATE TABLE contatos
 (
     id BIGSERIAL PRIMARY KEY NOT NULL,
     idtipocontato BIGSERIAL NOT NULL,
-    texto VARCHAR(255) NOT NULL,
+    texto VARCHAR(255),
     idcliente BIGSERIAL NOT NULL,
     CONSTRAINT fk_cliente
         FOREIGN KEY(idcliente)
-            REFERENCES clientes(id),
+        REFERENCES clientes(id),
     CONSTRAINT fk_tipo_contato
         FOREIGN KEY(idtipocontato)
-            REFERENCES tipo_contato(id)
+        REFERENCES tipo_contato(id)
 );
 ```
 

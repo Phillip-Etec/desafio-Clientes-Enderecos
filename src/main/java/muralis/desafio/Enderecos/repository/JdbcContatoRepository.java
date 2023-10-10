@@ -1,9 +1,7 @@
 package muralis.desafio.Enderecos.repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -11,27 +9,24 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import muralis.desafio.Enderecos.model.Contato;
-import muralis.desafio.Enderecos.model.Endereco;
 
 @Repository
-public class JdbcContatoRepository implements ContatoRepository { 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+public class JdbcContatoRepository implements ContatoRepository {
 	
 	@Autowired
-	private ModelMapper mapper;
+	private JdbcTemplate jdbcTemplate;
 
 	@Override
 	public int salvar(Contato contato ) {
-		return jdbcTemplate.update("INSERT INTO contatos (tipo, texto, idcliente) VALUES(?, ?, ?)",
-				new Object[] { contato.getTipo(), contato.getTexto(), contato.getIdCliente()  });
+		return jdbcTemplate.update("INSERT INTO contatos (idtipocontato, texto, idcliente) VALUES(?, ?, ?)",
+				new Object[] { contato.getTipo().getId(), contato.getTexto(), contato.getIdCliente()  });
 	}
 
 	@Override
 	public int atualizar(Contato contato) {
 	
-			return jdbcTemplate.update("UPDATE contatos SET texto=?, tipo=?  WHERE id=?",
-					new Object[] { contato.getTexto(),contato.getTipo(), contato.getId() });
+			return jdbcTemplate.update("UPDATE contatos SET texto=?, idtipocontato=?  WHERE id=?",
+					new Object[] { contato.getTexto(),contato.getTipo().getId(), contato.getId() });
 	    
 	}
 	
@@ -47,7 +42,8 @@ public class JdbcContatoRepository implements ContatoRepository {
 	@Override
 	public Contato encontrarPorId(Long id) {
 		try {
-			Contato contato = jdbcTemplate.queryForObject("SELECT id, tipo, texto, idcliente FROM contatos WHERE id=?",
+				
+			Contato contato = jdbcTemplate.queryForObject("SELECT id, idtipocontato, texto, idcliente FROM contatos WHERE id=?",
 	        BeanPropertyRowMapper.newInstance(Contato.class), id);
 			return contato;
 		} 

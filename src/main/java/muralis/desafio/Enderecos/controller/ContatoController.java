@@ -29,6 +29,8 @@ import muralis.desafio.Enderecos.dto.ContatoDto;
 import muralis.desafio.Enderecos.dto.EnderecoDto;
 import muralis.desafio.Enderecos.model.Cliente;
 import muralis.desafio.Enderecos.model.Contato;
+import muralis.desafio.Enderecos.model.TipoContato;
+import muralis.desafio.Enderecos.repository.TipoContatoRepository;
 
 @CrossOrigin(origins = "http://localhost:9090")
 @RestController
@@ -40,6 +42,9 @@ public class ContatoController {
 	
 	@Autowired
   	ContatoRepository repositorioDeContato;
+	
+	@Autowired
+	TipoContatoRepository repositorioDeTipoDeContato;
 	
 	@GetMapping("/contatos")
 	public ResponseEntity<List<ContatoDto>> getTodosOsContatos(@RequestParam(required = false) String idcliente) {
@@ -88,10 +93,15 @@ public class ContatoController {
 	@PostMapping("/contatos")
 	public ResponseEntity<String> createContato(@RequestBody ContatoDto contatoDto) {
 		try {
+			TipoContato tipoDeContato = repositorioDeTipoDeContato.encontrarPorNome(contatoDto.getTipo()).get(0);
+			
+			if(tipoDeContato == null)
+				return new ResponseEntity<>("Tipo de Contato inexistente.", HttpStatus.NOT_FOUND);
+			
 			
 			Contato contatoParaSalvar = 
 					new Contato ( 
-						contatoDto.getTipo(),
+						tipoDeContato,
 						contatoDto.getTexto(),
 						contatoDto.getIdCliente()
 					);
@@ -101,8 +111,7 @@ public class ContatoController {
 			return new ResponseEntity<>("Contato cadastrado com sucesso.", HttpStatus.CREATED);
 		}
 		catch (Exception e) {
-			System.out.println(e.getMessage());
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Não foi possível cadastrar o contato. Erro:\n" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	

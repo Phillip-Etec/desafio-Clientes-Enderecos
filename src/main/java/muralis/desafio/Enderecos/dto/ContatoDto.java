@@ -1,10 +1,5 @@
 package muralis.desafio.Enderecos.dto;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import muralis.desafio.Enderecos.model.Endereco;
-
 public class ContatoDto {
 	
 	private String tipo;
