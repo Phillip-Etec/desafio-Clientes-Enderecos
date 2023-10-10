@@ -28,7 +28,7 @@ public class EnderecoViacep {
 		return cep;
 	}
 	
-	private void noError() {
+	private void noErro() {
 		erro = false;
 	}
 
