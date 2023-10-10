@@ -1,8 +1,6 @@
 package muralis.desafio.Enderecos.model;
 
-import org.springframework.data.relational.core.mapping.Table;
 
-@Table(name = "tipo_contato")
 public class TipoContato {
 	
 	private long id;

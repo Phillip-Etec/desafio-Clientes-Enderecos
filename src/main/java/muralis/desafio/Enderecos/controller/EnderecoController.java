@@ -134,26 +134,25 @@ public class EnderecoController {
 	@PutMapping("/enderecos/{id}")
 	public ResponseEntity<String> updateEndereco(@PathVariable("id") long id, @RequestBody EnderecoDto enderecoDto) {
 		try {
+			Endereco endereco = repositorioDeEndereco.encontrarPorId(id);
 			EnderecoViacep enderecoCompleto = getCep(enderecoDto.getCep().replace("-", ""));
 			
 			if(enderecoCompleto == null) {
 				return new ResponseEntity<>("Erro na API viacep.", HttpStatus.SERVICE_UNAVAILABLE);
 			}
 			
-			if(enderecoCompleto.getError()) {
+			if(enderecoCompleto.getErro()) {
 				return new ResponseEntity<>("CEP inválido.", HttpStatus.NOT_FOUND);
 			}
 			
-			Endereco enderecoParaSalvar = 
-				new Endereco ( enderecoCompleto.getCep(),
-						enderecoCompleto.getLogradouro(),
-						enderecoCompleto.getLocalidade(),
-						enderecoDto.getNumero(),
-						enderecoDto.getComplemento(),
-						enderecoDto.getIdCliente()
-				);
+			endereco.setCep(enderecoCompleto.getCep());
+			endereco.setLogradouro(enderecoCompleto.getLogradouro());
+			endereco.setCidade(enderecoCompleto.getLocalidade());
+			endereco.setNumero(enderecoDto.getNumero());
+			endereco.setComplemento(enderecoDto.getComplemento());
+			endereco.setIdCliente(enderecoDto.getIdCliente());
 	    	
-			repositorioDeEndereco.atualizar(enderecoParaSalvar);
+			repositorioDeEndereco.atualizar(endereco);
 			return new ResponseEntity<>("Endereço atualizado com sucesso!.", HttpStatus.OK);
 		}
 		catch (Exception e) {

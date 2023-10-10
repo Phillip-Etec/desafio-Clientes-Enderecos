@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>muralis.desafio</groupId>
 	<artifactId>Enderecos</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.2.1-SNAPSHOT</version>
 	<name>Enderecos</name>
 	<description>Resolução do desafio React da muralis</description>
 	<properties>
@@ -58,11 +58,6 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 			<version>4.0.4</version>
-		</dependency>
-		<dependency>
-			<groupId>com.bezkoder</groupId>
-			<artifactId>spring-boot-jdbctemplate-postgresql</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
