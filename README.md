@@ -3,6 +3,33 @@ Esse repositório contém a solução para o desafio back-end da Muralis de Java
 O projeto é uma API restful, que recebe requests HTTP e manipula um banco de dados PostgresSQL.
 
 De forma resumida, com essa API é possível gerenciar clientes cadastrados, além de poder gerenciar endereços e contatos dos respectivos clientes, com a utilização da API externa [viacep](cep.com.br/) para preencher os dados do endereço automaticamente. 
+
+```mermaid
+classDiagram
+Contato --* Cliente
+Endereco --* Cliente
+
+
+class Cliente {
+    -id: int
+    -nome: String
+    -dataCadastro: String
+}
+
+class Contato {
+    -id: int
+    -tipo: String
+    -texto: String
+}
+
+class Endereco {
+    -cep: String
+    -logradouro: String
+    -cidade: String
+    -numero: String
+    -complemento: String
+}
+```
 ___
 ## Iniciando
 Dependências:
