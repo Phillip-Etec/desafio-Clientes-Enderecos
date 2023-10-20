@@ -2,8 +2,7 @@
 Esse repositório contém a solução para o desafio back-end da Muralis de Java Spring Boot.
 O projeto é uma API restful, que recebe requests HTTP e manipula um banco de dados PostgresSQL.
 
-Esse branch foi criado especificamente para separar o tipo de contato do contato em si em 2 objetos no código em java e 2 entidades no banco de dados, normalizando-o.
-As respostas HTTP da API continuam funcionando da mesma forma, porém os requests HTTP dos métodos POST e PUT referentes aos contatos passam a ter o atributo `tipoContatoId` devido ao decoplamento.
+De forma resumida, com essa API é possível gerenciar clientes cadastrados, além de poder gerenciar endereços e contatos dos respectivos clientes, com a utilização da API externa [viacep](cep.com.br/) para preencher os dados do endereço automaticamente. 
 ___
 ## Iniciando
 Dependências:
@@ -12,7 +11,7 @@ Dependências:
 * Maven versão 3.8.7
 
 Para iniciar o projeto, basta clonar esse repositório e rodá-lo com o maven:
-```
+```bash
 git clone https://github.com/Phillip-Etec/desafio-Clientes-Enderecos --depth 1
 cd desafio-Clientes-Enderecos
 mvn spring-boot:run
@@ -28,7 +27,7 @@ server.port = 9090
 spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
 ```
 
-Após a configuração, basta enviar requests HTTP para a porta que a API está escutando. Enviar requests HTTP podem ser feitas tanto com GUIs, como o [Postman](https://www.postman.com/), quanto por utilidades de linha de comando, como o curl, e aqui estão alguns exemplos de como usá-lo para fazer requests à esta API:
+Após a configuração, basta enviar requests HTTP para a porta que a API está escutando. Enviar requests HTTP podem ser feitas tanto com GUIs, como o [Postman](https://www.postman.com/), quanto por utilidades de linha de comando, como o [curl](https://curl.se/), e aqui estão alguns exemplos de como usá-lo para fazer requests à esta API:
 - Create
     ```bash
     curl --location --request POST 'http://localhost:9090/api/clientes' --header 'Content-Type: application/json' --data-raw '{"nome":"nome"}'
@@ -96,7 +95,7 @@ CREATE TABLE contatos
         FOREIGN KEY(idtipocontato)
             REFERENCES tipo_contato(id)
 );
-``````
+```
 Tipos de contatos já cadastrados:
 |  id  | tipo            |
 | :--: | :-------------- |
@@ -109,10 +108,10 @@ ___
 
 ## APIs
 
-A seguir estão as tabelas explicando as APIs fornecidas:
+A seguir estão as tabelas explicando os endpoints fornecidos:
 
 
-### API de Clientes:
+### Endpoints de Clientes:
 
 | Verbo HTTP  | Path |  Ação  | Exemplo Corpo JSON | Função |
 | :---------: | :--- | :----- | :--------          | :----- |
@@ -123,7 +122,7 @@ A seguir estão as tabelas explicando as APIs fornecidas:
 | DELETE | /api/clientes/{id} | Deletar um cliente pelo id | ` ` | Mensagem de sucesso ou erro |
 | DELETE | /api/clientes/ | Deletar todos os clientes | ` ` | Mensagem de sucesso ou erro |
 
-### API de Endereços:
+### Endpoints de Endereços:
 
 | Verbo HTTP  | Path |  Ação  | Exemplo Corpo JSON | Função |
 | :---------: | :--- | :----- | :--------          | :----- |
@@ -134,7 +133,7 @@ A seguir estão as tabelas explicando as APIs fornecidas:
 | DELETE | /api/enderecos/ | Deletar todos os enderecos | ` ` | Mensagem de sucesso ou erro |
 | GET    | /api/enderecoviacep?cep={cep} | Pesquisar um endereço pelo CEP {cep} na API viacep | ` ` | Objeto EnderecoViacep |
 
-### API de Contatos:
+### Endpoints de Contatos:
 
 | Verbo HTTP  | Path |  Ação  | Exemplo Corpo JSON | Função |
 | :---------: | :--- | :----- | :--------          | :----- |
