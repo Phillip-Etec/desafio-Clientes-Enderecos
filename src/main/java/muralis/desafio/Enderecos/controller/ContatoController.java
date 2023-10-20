@@ -1,6 +1,5 @@
 package muralis.desafio.Enderecos.controller;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,14 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import muralis.desafio.Enderecos.model.Endereco;
-import muralis.desafio.Enderecos.repository.ClienteRepository;
 import muralis.desafio.Enderecos.repository.ContatoRepository;
-import muralis.desafio.Enderecos.viacep.EnderecoViacep;
-import muralis.desafio.Enderecos.dto.ClienteDto;
 import muralis.desafio.Enderecos.dto.ContatoDto;
-import muralis.desafio.Enderecos.dto.EnderecoDto;
-import muralis.desafio.Enderecos.model.Cliente;
 import muralis.desafio.Enderecos.model.Contato;
 import muralis.desafio.Enderecos.model.TipoContato;
 import muralis.desafio.Enderecos.repository.TipoContatoRepository;
@@ -41,52 +34,52 @@ public class ContatoController {
 	ModelMapper mapper;
 	
 	@Autowired
-  	ContatoRepository repositorioDeContato;
+	ContatoRepository repositorioDeContato;
 	
 	@Autowired
 	TipoContatoRepository repositorioDeTipoDeContato;
 	
 	@GetMapping("/contatos")
 	public ResponseEntity<List<ContatoDto>> getTodosOsContatos(@RequestParam(required = false) String idcliente) {
-  		try {
-  			List<Contato> contatos = new ArrayList<Contato>();
-  			
-  			if(idcliente == null)
-  				repositorioDeContato.todosOsContatos().forEach(contatos::add);
-  			else
-  				repositorioDeContato.encontrarPorCliente(Long.parseLong(idcliente)).forEach(contatos::add);
+		try {
+			List<Contato> contatos = new ArrayList<Contato>();
+			
+			if(idcliente == null)
+				repositorioDeContato.todosOsContatos().forEach(contatos::add);
+			else
+				repositorioDeContato.encontrarPorCliente(Long.parseLong(idcliente)).forEach(contatos::add);
 
-  			if (contatos.isEmpty())
-  				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-  			
-  			List<ContatoDto> respostaContatos = contatos.stream()
-  												.map(contato -> mapper.map(contato, ContatoDto.class))
-  												.collect(Collectors.toList());
-  			
-  			return new ResponseEntity<>(respostaContatos, HttpStatus.OK);
-  		} catch (Exception e) {
-  			System.out.println(e.getMessage());
-  			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-  		}
-  	}
+			if (contatos.isEmpty())
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			
+			List<ContatoDto> respostaContatos = contatos.stream()
+												.map(contato -> mapper.map(contato, ContatoDto.class))
+												.collect(Collectors.toList());
+			
+			return new ResponseEntity<>(respostaContatos, HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	@GetMapping("/contatos/{id}")
 	public ResponseEntity<ContatoDto> getContatoPorId(@PathVariable("id") long id) {
 		try {
 			Contato contato = repositorioDeContato.encontrarPorId(id);
 		
-	  		if (contato != null) {
-	  			ContatoDto respostaContato = mapper.map(contato, ContatoDto.class);
-	  			return new ResponseEntity<>(respostaContato, HttpStatus.OK);
-	  		} 
-	  		else
-	  			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			if (contato != null) {
+				ContatoDto respostaContato = mapper.map(contato, ContatoDto.class);
+				return new ResponseEntity<>(respostaContato, HttpStatus.OK);
+			}
+			else
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-  		catch (Exception e) {
-  			System.out.println(e.getMessage());
+		catch (Exception e) {
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-  	}
+	}
 	
 	@PostMapping("/contatos")
 	public ResponseEntity<String> createContato(@RequestBody ContatoDto contatoDto) {
@@ -118,12 +111,12 @@ public class ContatoController {
 		try {
 			List<TipoContato> tipoDeContato = repositorioDeTipoDeContato.encontrarPorNome(contatoDto.getTipo());
 			
-			for(TipoContato tipoC: tipoDeContato) {
-				System.out.println(tipoC.toString());
-				System.out.println(tipoDeContato.indexOf(tipoC));
-			}
-			
-			System.out.println(tipoDeContato.get(0).toString());
+//			for(TipoContato tipoC: tipoDeContato) {
+//				//System.out.println(tipoC.toString());
+//				//System.out.println(tipoDeContato.indexOf(tipoC));
+//			}
+//			
+//			//System.out.println(tipoDeContato.get(0).toString());
 			
 			if(tipoDeContato == null)
 				return new ResponseEntity<>("Tipo de Contato inexistente.", HttpStatus.NOT_FOUND);
@@ -136,7 +129,7 @@ public class ContatoController {
 			_contato.setId(id);
 			_contato.setTexto(contatoDto.getTexto());
 			_contato.setTipo(tipoDeContato.get(0));
-	    	
+		
 			repositorioDeContato.atualizar(_contato);
 			return new ResponseEntity<>("Contato atualizado com sucesso!.", HttpStatus.OK);
 		}

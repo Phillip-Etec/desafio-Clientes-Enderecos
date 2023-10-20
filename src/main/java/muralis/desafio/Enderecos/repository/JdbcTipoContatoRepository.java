@@ -7,6 +7,8 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import java.util.Map;
+import java.util.HashMap;
 
 import muralis.desafio.Enderecos.model.TipoContato;
 
@@ -66,5 +68,17 @@ public class JdbcTipoContatoRepository implements TipoContatoRepository {
 	@Override
 	public int deletarTodos() {
 		return jdbcTemplate.update("DELETE FROM contatos");
+	}
+	
+	@Override
+	public Map<Long, TipoContato> tiposDeContatosCadastrados() {
+		List<TipoContato> tiposDeContato = jdbcTemplate.query("SELECT * FROM tipo_contato", BeanPropertyRowMapper.newInstance(TipoContato.class));
+		Map<Long, TipoContato> tiposDeContatosCadastrados = new HashMap<>();
+		
+		for(TipoContato tipoDeContatoAtual: tiposDeContato) {
+			tiposDeContatosCadastrados.put(tipoDeContatoAtual.getId(), tipoDeContatoAtual);
+		}
+		
+		return tiposDeContatosCadastrados;
 	}
 }

@@ -1,14 +1,7 @@
 package muralis.desafio.Enderecos.dto;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import muralis.desafio.Enderecos.model.Endereco;
-
 public class EnderecoDto {
 	
-	
-	private long id;
 	
 	private String cep;
 	
@@ -32,7 +25,6 @@ public class EnderecoDto {
 	}
 	
 	public EnderecoDto(long id, String cep, String complemento, long idCliente) {
-		setId(id);
 		setCep(cep);
 		setComplemento(complemento);
 		setIdCliente(idCliente);
@@ -63,7 +55,6 @@ public class EnderecoDto {
 	}
 	
 	public EnderecoDto(long id, String cep, String logradouro, String cidade, String numero, String complemento, long idCliente) {
-		setId(idCliente);
 		setCep(cep);
 		setLogradouro(logradouro);
 		setCidade(cidade);
@@ -72,13 +63,6 @@ public class EnderecoDto {
 		setIdCliente(idCliente);
 	}
 	
-	public void setId(long id) {
-		this.id = id;
-	}
-	
-	public long getId() {
-		return id;
-	}
 	
 	public void setIdCliente(long idCliente) {
 		this.idCliente = idCliente;
@@ -136,7 +120,7 @@ public class EnderecoDto {
 	
 	@Override
 	public String toString() {
-		return "Endereço { id: "+id+"; cep: "+cep+"; logradouro: "+logradouro+"; cidade: "+cidade+"; numero"+numero+"; complemento: "+complemento+"; idCliente: "+idCliente+" }";
+		return "Endereço { cep: "+cep+"; logradouro: "+logradouro+"; cidade: "+cidade+"; numero"+numero+"; complemento: "+complemento+"; idCliente: "+idCliente+" }";
 	}
 	
 }

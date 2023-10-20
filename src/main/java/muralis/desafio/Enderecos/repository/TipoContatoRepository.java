@@ -1,6 +1,7 @@
 package muralis.desafio.Enderecos.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import muralis.desafio.Enderecos.model.*;
 
@@ -16,6 +17,8 @@ public interface TipoContatoRepository {
 	List<TipoContato> todosOsTiposDeContato();
 	
 	List<TipoContato> encontrarPorNome(String nome);
+	
+	Map<Long, TipoContato> tiposDeContatosCadastrados();
 	
 	int deletarTodos();
 }

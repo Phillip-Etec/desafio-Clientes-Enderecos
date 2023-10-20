@@ -1,7 +1,7 @@
 package muralis.desafio.Enderecos.repository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,22 +31,17 @@ public class JdbcContatoRepository implements ContatoRepository {
 	@Override
 	public int atualizar(Contato contato) {
 	
-			return jdbcTemplate.update("UPDATE contatos SET texto=?, tipo=?, idtipocontato=?  WHERE id=?",
+			return jdbcTemplate.update("UPDATE contatos SET texto=?, idtipocontato=?  WHERE id=?",
 					new Object[] { contato.getTexto(), contato.getTipo().getId(), contato.getId() });
 	    
 	}
 	
 	@Override
 	public List<Contato> encontrarPorCliente(long idCliente) {
-		
-		List<Long> idsTiposDeContatos;
 		String SqlQuery = "SELECT * FROM contatos JOIN clientes ON idcliente = clientes.id WHERE idcliente="+idCliente+";";
 		
 		List<Contato> contatos = jdbcTemplate.query(SqlQuery, BeanPropertyRowMapper.newInstance(Contato.class));
-		idsTiposDeContatos = contatos.stream().map(contato -> contato.getIdTipoContato()).collect(Collectors.toList());
-		
-		for(int i=0; i<contatos.size(); i++)
-			contatos.get(i).setTipo(repositorioDeTiposDeContatos.encontrarPorId(idsTiposDeContatos.get(i)));;
+		injetarTiposDeContatos(contatos);
 		
 		return contatos;
 	}
@@ -74,13 +69,8 @@ public class JdbcContatoRepository implements ContatoRepository {
 
 	@Override
 	public List<Contato> todosOsContatos() {
-		List<Long> idsTiposDeContatos;
 		List<Contato> contatos = jdbcTemplate.query("SELECT * FROM contatos", BeanPropertyRowMapper.newInstance(Contato.class));
-		
-		idsTiposDeContatos = contatos.stream().map(contato -> contato.getIdTipoContato()).collect(Collectors.toList());
-		
-		for(int i=0; i<contatos.size(); i++)
-			contatos.get(i).setTipo(repositorioDeTiposDeContatos.encontrarPorId(idsTiposDeContatos.get(i)));;
+		injetarTiposDeContatos(contatos);
 		
 		return contatos;
 	}
@@ -89,14 +79,8 @@ public class JdbcContatoRepository implements ContatoRepository {
 	@Override
 	public List<Contato> encontrarPorTexto(String texto) {
 		String SqlQuery = "SELECT * FROM contatos WHERE texto ILIKE '%" + texto + "%'";
-		List<Long> idsTiposDeContatos;
 		List<Contato> contatos = jdbcTemplate.query(SqlQuery, BeanPropertyRowMapper.newInstance(Contato.class));
-		
-		idsTiposDeContatos = contatos.stream().map(contato -> contato.getIdTipoContato()).collect(Collectors.toList());
-		
-		for(int i=0; i<contatos.size(); i++)
-			contatos.get(i).setTipo(repositorioDeTiposDeContatos.encontrarPorId(idsTiposDeContatos.get(i)));;
-		
+		injetarTiposDeContatos(contatos);
 
 		return contatos;
 	}
@@ -104,6 +88,19 @@ public class JdbcContatoRepository implements ContatoRepository {
 	@Override
 	public int deletarTodos() {
 		return jdbcTemplate.update("DELETE FROM contatos");
+	}
+	
+	private Map<Long, TipoContato> consultarTiposDeContatos() {
+		return repositorioDeTiposDeContatos.tiposDeContatosCadastrados();
+	}
+	
+	private void injetarTiposDeContatos(List<Contato> contatos) {
+		Map<Long, TipoContato> tiposDeContatos = consultarTiposDeContatos();
+		
+		for(Contato contatoAtual: contatos) {
+			TipoContato tipoDeContatoParaOContatoAtual = tiposDeContatos.get(contatoAtual.getId());
+			contatoAtual.setTipo(tipoDeContatoParaOContatoAtual);
+		}
 	}
 
 }
