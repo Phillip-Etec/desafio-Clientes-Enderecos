@@ -37,33 +37,33 @@ public class EnderecoController {
 	
 	
 	@Autowired
-  	EnderecoRepository repositorioDeEndereco;
+	EnderecoRepository repositorioDeEndereco;
 	
 	@GetMapping("/enderecos")
 	public ResponseEntity<List<EnderecoDto>> getTodosOsEnderecos(@RequestParam(required = false) String idcliente) {
-  		try {
-  			List<Endereco> enderecos = new ArrayList<Endereco>();
-  			
-  			if(idcliente == null)
-  				repositorioDeEndereco.todosOsEnderecos().forEach(enderecos::add);
-  			else 
-  				repositorioDeEndereco.encontrarPorCliente(Long.parseLong(idcliente)).forEach(enderecos::add);
-  			
-  			if (enderecos.isEmpty()) {
-  				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-  			}
-  			
-  			List<EnderecoDto> respostaEnderecos = 	enderecos.stream()
+		try {
+			List<Endereco> enderecos = new ArrayList<Endereco>();
+			
+			if(idcliente == null)
+				repositorioDeEndereco.todosOsEnderecos().forEach(enderecos::add);
+			else 
+				repositorioDeEndereco.encontrarPorCliente(Long.parseLong(idcliente)).forEach(enderecos::add);
+			
+			if (enderecos.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			
+			List<EnderecoDto> respostaEnderecos = 	enderecos.stream()
 													.map(endereco -> mapper.map(endereco, EnderecoDto.class))
 													.collect(Collectors.toList());
-  			
-  			return new ResponseEntity<>(respostaEnderecos, HttpStatus.OK);
-  		} 
-  		catch (Exception e) {
-  			System.out.println(e.getMessage());
-  			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-  		}
-  	}
+			
+			return new ResponseEntity<>(respostaEnderecos, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	@GetMapping("/enderecos/{id}")
 	public ResponseEntity<EnderecoDto> getEnderecoPorId(@PathVariable("id") long id) {
@@ -81,7 +81,7 @@ public class EnderecoController {
 		catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-  	}
+	}
 	
 	@GetMapping("/enderecoviacep")
 	private EnderecoViacep getCep(@RequestParam(required = true) String cep) {

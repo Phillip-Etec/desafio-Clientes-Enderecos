@@ -96,15 +96,15 @@ CREATE TABLE contatos
         FOREIGN KEY(idtipocontato)
             REFERENCES tipo_contato(id)
 );
-```
+``````
 Tipos de contatos já cadastrados:
-|  id  | tipo     |
-| :--: | :------- |
-|  1   | 'e-mail' |
+|  id  | tipo            |
+| :--: | :-------------- |
+|  1   | 'e-mail'        |
 |  2   | 'telefone fixo' |
-|  3   | 'celular' |
-|  4   | 'whatsapp' |
-|  5   | 'website' |
+|  3   | 'celular'       |
+|  4   | 'whatsapp'      |
+|  5   | 'website'       |
 ___
 
 ## APIs
@@ -114,32 +114,32 @@ A seguir estão as tabelas explicando as APIs fornecidas:
 
 ### API de Clientes:
 
-| Método  | Url |  Ação  | Exemplo Corpo JSON | Retorno |
-| :------: | :-- | :----- | :--------          | :------ |
-| POST | /api/clientes | Criar um novo cliente | `{"nome":"nome", "dataCadastro":"2023-07-04 00:00:00"}` | Mensagem de sucesso ou erro |
-|  GET | /api/clientes | Retornar todos os clientes | ` ` | Array de Objetos Cliente | GET | /api/clientes/{id} | Retornar um cliente pelo id | ` ` | Objeto Cliente |
-| GET | /api/clientes?nome={nome} | Retornar todos os clientes com esse {nome} | ` ` | Array de Objetos Cliente | Mensagem de sucesso ou erro |
-| PUT | /api/clientes/{id} | Atualizar um cliente pelo | `{"nome":"novo nome", "dataCadastro":"2023-02-15 00:00:00"}` | Mensagem de sucesso ou erro |
+| Verbo HTTP  | Path |  Ação  | Exemplo Corpo JSON | Função |
+| :---------: | :--- | :----- | :--------          | :----- |
+| POST   | /api/clientes | Criar um novo cliente | `{"nome":"nome", "dataCadastro":"2023-07-04 00:00:00"}` | Mensagem de sucesso ou erro |
+|  GET   | /api/clientes | Retornar todos os clientes | ` ` | Array de Objetos Cliente | GET | /api/clientes/{id} | Retornar um cliente pelo id | ` ` | Objeto Cliente |
+| GET    | /api/clientes?nome={nome} | Retornar todos os clientes com esse {nome} | ` ` | Array de Objetos Cliente | Mensagem de sucesso ou erro |
+| PUT    | /api/clientes/{id} | Atualizar um cliente pelo | `{"nome":"novo nome", "dataCadastro":"2023-02-15 00:00:00"}` | Mensagem de sucesso ou erro |
 | DELETE | /api/clientes/{id} | Deletar um cliente pelo id | ` ` | Mensagem de sucesso ou erro |
 | DELETE | /api/clientes/ | Deletar todos os clientes | ` ` | Mensagem de sucesso ou erro |
 
 ### API de Endereços:
 
-| Método  | Url |  Ação  | Exemplo Corpo JSON | Retorno |
-| :------: | :-- | :----- | :--------          | :------ |
-| POST | /api/enderecos | Criar um novo endereço | `{"cep":"010010","complemento":"Segundo Andar","numero":"12B","idCliente":1}` | Mensagem de sucesso ou erro |
-|  GET | /api/enderecos | Retornar todos os enderecos | ` ` | Array de Objetos Cliente | GET | /api/enderecos/{id} | Retornar um endereco pelo id | ` ` | Objeto Cliente |
-| PUT | /api/enderecos/{id} | Atualizar um endereco pelo {id} | `{"cep":"010010","complemento":"","numero":"9","idCliente":2}` | Mensagem de sucesso ou erro |
+| Verbo HTTP  | Path |  Ação  | Exemplo Corpo JSON | Função |
+| :---------: | :--- | :----- | :--------          | :----- |
+| POST   | /api/enderecos | Criar um novo endereço | `{"cep":"010010","complemento":"Segundo Andar","numero":"12B","idCliente":1}` | Mensagem de sucesso ou erro |
+|  GET   | /api/enderecos | Retornar todos os enderecos | ` ` | Array de Objetos Cliente | GET | /api/enderecos/{id} | Retornar um endereco pelo id | ` ` | Objeto Cliente |
+| PUT    | /api/enderecos/{id} | Atualizar um endereco pelo {id} | `{"cep":"010010","complemento":"","numero":"9","idCliente":2}` | Mensagem de sucesso ou erro |
 | DELETE | /api/enderecos/{id} | Deletar um endereco pelo id | ` ` | Mensagem de sucesso ou erro |
 | DELETE | /api/enderecos/ | Deletar todos os enderecos | ` ` | Mensagem de sucesso ou erro |
-| GET | /api/enderecoviacep?cep={cep} | Pesquisar um endereço pelo CEP {cep} na API viacep | ` ` | Objeto EnderecoViacep |
+| GET    | /api/enderecoviacep?cep={cep} | Pesquisar um endereço pelo CEP {cep} na API viacep | ` ` | Objeto EnderecoViacep |
 
 ### API de Contatos:
 
-| Método  | Url |  Ação  | Exemplo Corpo JSON | Retorno |
-| :------: | :-- | :----- | :--------          | :------ |
-| POST | /api/contatos | Criar um novo contato | `{"texto":"guilherme.2753gmail.com","tipo":"email","idCliente":1}` | Mensagem de sucesso ou erro |
-|  GET | /api/contatos | Retornar todos os contatos | ` ` | Array de Objetos Contato | GET | /api/contatos/{id} | Retornar um contato pelo id | ` ` | Objeto Contato |
-| PUT | /api/contatos/{id} | Atualizar um contato pelo id | `{"texto":"william.2753gmail.com","tipo":"email","idCliente":1}` | Mensagem de sucesso ou erro |
+| Verbo HTTP  | Path |  Ação  | Exemplo Corpo JSON | Função |
+| :---------: | :--- | :----- | :--------          | :----- |
+| POST   | /api/contatos | Criar um novo contato | `{"texto":"guilherme.2753gmail.com","tipo":"email","idCliente":1}` | Mensagem de sucesso ou erro |
+|  GET   | /api/contatos | Retornar todos os contatos | ` ` | Array de Objetos Contato | GET | /api/contatos/{id} | Retornar um contato pelo id | ` ` | Objeto Contato |
+| PUT    | /api/contatos/{id} | Atualizar um contato pelo id | `{"texto":"william.2753gmail.com","tipo":"email","idCliente":1}` | Mensagem de sucesso ou erro |
 | DELETE | /api/contatos/{id} | Deletar um cliente pelo id | ` ` | Mensagem de sucesso ou erro |
 | DELETE | /api/contatos/ | Deletar todos os clientes | ` ` | Mensagem de sucesso ou erro |
