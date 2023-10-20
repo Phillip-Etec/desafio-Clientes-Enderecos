@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import muralis.desafio.Enderecos.model.Cliente;
 
 public class ClienteDto {
+	
+	private long id;
 
 	private String nome;
 	
@@ -21,6 +23,7 @@ public class ClienteDto {
 	}
 	
 	public ClienteDto(long id, String nome) {
+		setId(id);
 		setNome(nome);
 		setDataCadastro(LocalDateTime.now());
 	}
@@ -31,11 +34,13 @@ public class ClienteDto {
 	}
 	
 	public ClienteDto(long id, String nome,LocalDateTime dataCadastro) {
+		setId(id);
 		setNome(nome);
 		setDataCadastro(dataCadastro);
 	}
 	
 	public ClienteDto(long id, String nome, String dataCadastro) {
+		setId(id);
 		setNome(nome);
 		dataCadastro = dataCadastro.replace(' ', 'T');
 		setDataCadastro(LocalDateTime.parse(dataCadastro));
@@ -64,11 +69,18 @@ public class ClienteDto {
 		return dataCadastro;
 	}
 
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 	
+	public long getId() {
+		return this.id;
+	}
+
 	public void setDataCadastro(LocalDateTime dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}

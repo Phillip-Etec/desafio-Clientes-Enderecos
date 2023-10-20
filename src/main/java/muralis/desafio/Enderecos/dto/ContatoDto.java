@@ -2,6 +2,8 @@ package muralis.desafio.Enderecos.dto;
 
 public class ContatoDto {
 	
+	private long id;
+	
 	private String tipo;
 	
 	private String texto;
@@ -12,11 +14,12 @@ public class ContatoDto {
 		
 	}
 
-	public ContatoDto(String tipo, String texto, long idCliente) {
+	public ContatoDto(long id, String tipo, String texto, long idCliente) {
 		super();
-		this.tipo = tipo;
-		this.texto = texto;
-		this.idCliente = idCliente;
+		setId(id);
+		setTipo(tipo);
+		setTexto(texto);
+		setIdCliente(idCliente);
 	}
 
 
@@ -36,6 +39,14 @@ public class ContatoDto {
 		this.texto = texto;
 	}
 
+	public void setId(long id) {
+		this.id = id;
+	}
+	
+	public long getId() {
+		return id;
+	}
+	
 	public long getIdCliente() {
 		return idCliente;
 	}
@@ -45,6 +56,6 @@ public class ContatoDto {
 	}
 	
 	public String toString() {
-		return "{ tipo: "+tipo+"; texto: "+texto+"; idCliente: "+idCliente+" }";
+		return "{ id: "+id+"; tipo: "+tipo+"; texto: "+texto+" }";
 	}
 }
